@@ -1,0 +1,309 @@
+---
+title: "Ordinal regression"
+output: 
+  learnr::tutorial:
+     allow_skip: true
+tutorial:
+  id: "io.shinyapps.erasmusmc.ordreg"
+  version: 0.929     
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library("learnr")
+library(MASS)
+library(Hmisc)
+library(survival)
+library(lattice)
+library(ggplot2)
+library(SparseM)
+library(rms)
+library(EP03logistic)
+data("arthritis", package = "EP03logistic")
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+## Quiz
+
+The following questions test your knowledge about ordinal logistic regression
+
+### Question 1
+
+
+
+```{r Q1}
+quiz(
+  question("What are the odds that are moddelled in the proportional odds model?",
+    answer("The odds of being in category k vs the odds of being in any lower category"),
+    answer("The ods of being in category k vs being in caegory k-1"),
+    answer("The odds of being at least in category k  vs being in a any category lower than k", correct=TRUE),
+    answer("the odds of advancing to category k conditional of being in category k-1 or higher"),
+        allow_retry = TRUE, random_answer_order = FALSE
+  )
+)
+```
+
+### Question 2
+
+
+```{r Q2}
+quiz(
+  question("Select all true statements?",
+    answer("The continuation ratio model is a model for an ordinal response",correct = TRUE),
+    answer("The Probit model is a model for binary outcomes", correct=TRUE),
+    answer("The polytomous regression model can only be used if the response is ordinal"),
+    answer("The zero inflated Poisson model is a model for overdispersed count data",correct = TRUE),
+        allow_retry = TRUE, random_answer_order = FALSE, type='multiple'
+  )
+)
+```
+
+## Exercise: Proportional odds model
+
+### Question 1
+
+Examine the outcome at baseline and follow-up. Make a frequency table of `baseline` and `arthritis_fu`.
+ 
+```{r P1, exercise=TRUE, exercise.lines = 10, eval=FALSE}
+
+
+
+```
+```{r P1-hint-1}
+table(arthritis$baseline)
+table(arthritis$arthritis_fu)
+```
+
+### Question 2
+
+Now make a crosstabulation of `arthritis_fu`, and `baseline` by treatment. Also look at the crosstabulation of these variables against each other.
+
+
+```{r P2, exercise=TRUE, exercise.lines = 10}
+
+```
+
+```{r P2-hint-1}
+table(arthritis$arthritis_fu, arthritis$trt)
+table(arthritis$baseline, arthritis$trt)
+table(arthritis$baseline, arthritis$arthritis_fu)
+```
+
+### Question 3
+
+The dataset is a bit small to consider all five levels of the outcome. Therefore we combine 'very poor' and 'poor' and 'good' and 'very good'. For convinience, we do the same with the baseline score.
+
+```{r P3, exercise=TRUE, exercise.lines = 10}
+levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+table(arthritis$baseline)
+table(arthritis$arthritis_fu)
+```
+
+
+### Question 4
+
+Now estimate a proportional odds logistic model using the treatment as single predictor. We can do this with the `polr` function from the `MASS` package. Call the resulting model `po1`. Use the `summary` to inspect the main results. 
+
+```{r P4-setup}
+levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+```
+
+```{r P4, exercise=TRUE, exercise.lines = 10}
+#po1<-polr(~, )
+
+```
+
+```{r P4-hint-1}
+po1<-polr(arthritis_fu~trt, data=arthritis)
+summary(po1)
+```
+
+Observe that there are two intercepts. One for each cutpoint that devide the distribution of the latent variable into the three groups defined by the outcome (poor, fair and good). 
+
+
+### Question 5
+
+To interpret the coefficients it is easier to convert them to odds ratios. You can do this in the same way is in a binary logistic regression model using the `coef` and `exp` functions. Also compute a confidence interval
+```{r P5-setup}
+levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+po1<-polr(arthritis_fu~trt, data=arthritis)
+
+
+```
+
+
+```{r P5, exercise=TRUE, exercise.lines = 10}
+
+
+
+
+```
+
+
+
+
+```{r P5-hint-1}
+exp(coef(po1))
+exp(confint(po1))
+
+```
+The OR is 1.6 so we estimate that odds of being in a gigher category (fair+good vs poor and good vs fair+poor) are 1.6 times as high. Observe that 1 is not included in the confidence interval so the effect of treatment is significant.
+
+### Question 6
+
+Now add the covariates for `sex`, `age` and the `baseline` score and call the model `po2`. Compute 95% confidence intervals for the coefficients. What can you conclude? 
+```{r P6-setup}
+levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+po1<-polr(arthritis_fu~trt, data=arthritis)
+
+
+```
+
+
+```{r P6, exercise=TRUE, exercise.lines = 10}
+
+
+
+
+```
+
+
+
+
+```{r P6-hint-1}
+
+po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
+summary(po2)
+exp(coef(po2))
+exp(confint(po2))
+```
+
+
+
+### Question 7
+
+Now look at the interaction between the baseline score and treatment (add it to the model of the previous question). How do you interpret the coefficients? What is your conclusion? 
+```{r P7-setup}
+levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+po1<-polr(arthritis_fu~trt, data=arthritis)
+po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
+
+
+```
+
+
+```{r P7, exercise=TRUE, exercise.lines = 10}
+
+
+
+
+```
+
+
+
+## Exercise: Continuation ratio model
+
+### Question 8
+The continuation ratio model is an other way to estimate a model with an ordinal response. This model models the log odds of the various categories as: 
+$$
+\frac{P(Y_i=k|P \geq k)}{1-P(Y_i=k|P \geq k)}= \sum_0^k \alpha_k X_i'\beta
+$$
+An advantage of this model specification is that afer special preparation of the data set we can use software routines for normal binary logistic regression to fit. Here we use the the function `cr.setup` from the `rms` package. This function creates a list with several variables: `y` is a new response variable that tells us if the response is above a certain cut-point between two reponses. `cluster` specifies which border between which of the levels we are considering. The variables `subs` and `reps` make merging with the original data easier. The details are not to important now, just follow the example:
+
+
+
+```{r P6cr-setup}
+levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+po1<-polr(arthritis_fu~trt, data=arthritis)
+```
+
+```{r P6cr, exercise=TRUE, exercise.lines = 10}
+arthritis_cc<- arthritis[complete.cases(arthritis$arthritis_fu),]
+cr_info <- with(arthritis_cc, cr.setup(arthritis_fu))
+art_cr <- data.frame(arthritis_cc[cr_info$subs, ], y=cr_info$y, border=cr_info$cohort)
+
+
+
+```
+
+
+
+### Question 9
+We can now use the `glm` function to estimate a logistic regression model on the resulting data set. Try this yourself do not forget to include the `border` variable. What are the odds ratios and their confidence intervals?
+
+
+```{r Pcr7-setup}
+levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+po1<-polr(arthritis_fu~trt, data=arthritis)
+
+
+arthritis_cc<- arthritis[complete.cases(arthritis$arthritis_fu),]
+cr_info <- with(arthritis_cc, cr.setup(arthritis_fu))
+art_cr <- data.frame(arthritis_cc[cr_info$subs, ], y=cr_info$y, border=cr_info$cohort)
+
+
+```
+
+```{r P7cr, exercise=TRUE, exercise.lines = 10}
+
+
+```
+
+```{r P7cr-hint,  exercise.lines = 10}
+cr1<-glm(y~trt+border, data=art_cr) 
+summary(cr1)
+exp(coef(cr1))
+exp(confint(cr1))
+```
+
+The interpretation of the coefficients is as follows: When taking placebo the log odds of having a poor outcome (vs all other outcomes) are 0.24. The log odds of having a fair outcome given that it is at least fair (so fair vs good) in the placebo group is 0.24+0.24=0.48. Both log odds decrease with 0.08 when patients are on Auronfin.   
