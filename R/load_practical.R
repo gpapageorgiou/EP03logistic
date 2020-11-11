@@ -4,7 +4,7 @@ load_practical <- function (name = NULL) {
                      "logisticregressionthree",
                      "conditionallogistictutorial",
                      "poissontutorial",
-                     "ordinaltorial"
+                     "ordinaltutorial"
                      )
   aliasnames <- c('EP03_logisticregression_Practical1',
                   'EP03_logisticregression_Practical2',
