@@ -1,0 +1,49 @@
+---
+title: "Ordinal logistic regression"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library('survival')
+library(devtools)
+devtools::load_all('.')
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Exercise: Proportional odds model
+
+### Question 1
+
+Examine the outcome at baseline and follow-up. Make a frequency table of `baseline` and `arthritis_fu`.
+
+### Question 2
+
+Now make a contingency table (crosstabulation) of `arthritis_fu`, and `baseline` by treatment. Also look at the contingency table of these variables against each other.
+
+### Question 3
+
+The data set is a bit small to consider all five levels of the outcome. Therefore we combine 'very poor' and 'poor' and 'good' and 'very good'. For convenience, we do the same with the baseline score.
+
+### Question 4
+
+Now estimate a proportional odds logistic model using the treatment as single predictor. We can do this with the `polr` function from the `MASS` package. Call the resulting model `po1`. Use the `summary` to inspect the main results. 
+
+### Question 5
+
+To interpret the coefficients it is easier to convert them to odds ratios. You can do this in the same way as in a binary logistic regression model using the `coef` and `exp` functions. Also compute a confidence interval.
+
+### Question 6
+
+Now add the covariates for `sex`, `age` and the `baseline` score and call the model `po2`. Compute 95% confidence intervals for the coefficients. What can you conclude? 
+
+### Question 7
+
+Now look at the interaction between the baseline score and treatment (add it to the model of the previous question). How do you interpret the coefficients? What is your conclusion? 
+
+## Exercise: Continuation ratio model
+
+### Question 8
+The continuation ratio model is another way to estimate a model with an ordinal response. This model models the log odds of the various categories as: 
+
+### Question 9
+We can now use the `glm` function to estimate a logistic regression model on the resulting data set. Try this yourself do not forget to include the `border` variable. What are the odds ratios and their confidence intervals?

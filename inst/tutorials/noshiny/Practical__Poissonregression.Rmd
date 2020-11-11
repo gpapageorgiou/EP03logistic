@@ -36,89 +36,25 @@ The table below presents dose-response data concerning the relationship between 
 
 ### Question 1
 
-Confirm that the number of person years and the number of events in the data set `doll`. For this we need to weight the data. 
-```{r P1, exercise=TRUE, eval=FALSE, echo=TRUE}
-w1 <- rep((1:NROW(doll)),doll$prsyears)
-with(doll[w1,], table(___, ___))
-w2 <-
-with(____)  
-
-```
-
-```{r P1-hint-2, include=FALSE}
-# Use:
-w1 <- rep((1:NROW(doll)),doll$prsyears)
-with(doll[w1,], table(smoke, age))
-w2 <- rep((1:NROW(doll)),doll$death)
-with(doll[w2,], table(smoke, age))
-# alternatively use
-xtabs(prsyears~age+smoke, data=doll)
-xtabs(death~age+smoke, data=doll)
-
-```
+Confirm the number of person years and the number of events using the data set `doll`. For this we need to weight the data. 
 
 ### Question 2
 
-Estimate a poisson model using only an intercept. Call the model glm1 What is the meaning of the estimated coefficient? Also estimate the coefficient by hand using the table.
-
-
-```{r P2,  eval=FALSE, echo=TRUE}
-doll$logpy <- log(___)
-glm1<-glm(___~1+offset(____),  family=poisson, data=doll)
-summary(___)
-```
-
-```{r P2-hint-2, include=FALSE}
-# The code is:
-doll$logpy <- log(doll$prsyears)
-glm1 <- glm(death~1+offset(logpy),  family=poisson, data=doll)
-summary(glm1)
-```
+Now we are going to estimate a Poisson model. First create the term to use as an offset variable. Now estimate a Poisson model using only an intercept (and the offset). Call the model glm1. What is the interpretation of the estimated coefficient? Also estimate the coefficient by hand using the table.
 
 ### Question 3
 
 Now fit the model with age category. Call the model glm2. Verify that you can calculate these coefficients also by hand.
-What can you say about the goodness of fit.
-
-```{r P3, echo=TRUE}
-glm1 <- glm(death~1+offset(logpy),  family=poisson, data=doll)
-```
-
-```{r P3-hint-2, include=FALSE}
-# The code is:
-glm2 <- glm(death~1+age+offset(logpy),  family=poisson, data=doll)
-summary(glm2)
-```
+What can you say about the goodness of fit?
 
 ### Question 4
 
-Now add the variable smoke. Call the model glm3. What can you say about the goodness of fit.
-
-
-
-```{r P4-hint-2, include=FALSE}
-# The code is:
-glm3 <- glm(death~1+age+smoke+offset(logpy),  family=poisson, data=doll)
-summary(glm3)
-```
+Now add the variable smoke. Call the model glm3. What can you say about the goodness of fit?
 
 ### Question 5
-Now we check if the effect of age can be better modlled by a linear trend. Use `as.numeric' to convert the factor to a numeric value. Call the model glm4. Does this model do better than the previous model (use a likelihood ratio test)?
 
-```{r P5-hint-2, include=FALSE}
-# the code is
-glm4 <- glm(death~1+as.numeric(age)+smoke+offset(logpy),  family=poisson, data=doll)
-anova(glm3, glm4,test = 'LRT')
-```
-
+Now we check if the effect of age can be better modeled by a linear trend. Use `as.numeric` to convert the factor to a numeric value. Call the model glm4. Does this model do better than the previous model (use a likelihood ratio test)?
 
 ### Question 6
-Now use  `log(as.numeric(age))` to moel the effect of age. What about the goodness-of-fit? Does this do better than the previous model?
 
-
-
-```{r P6-hint-2, include=FALSE}
-# the code is
-glm5 <- glm(death~1+I(log(as.numeric(age)))+smoke+offset(logpy),  family=poisson, data=doll)
-AIC(glm1, glm2, glm3, glm4, glm5)
-```
+Now use  `log(as.numeric(age))` to model the effect of age. What about the goodness-of-fit? Does this do better than the previous model?
