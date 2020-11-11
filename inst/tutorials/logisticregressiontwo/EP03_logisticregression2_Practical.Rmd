@@ -22,18 +22,18 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Quiz
 
-The following questions test your knowledge about logistic regression, odds and odds ratios. For some questions it might be convinient to have R or Excel open to use as a calculator. In this set op questions we also focus on model diagnostics. 
+The following questions test your knowledge of logistic regression, odds and odds ratios. For some questions it might be convenient to have R or Excel open to use as a calculator. In this set of questions we also focus on model diagnostics. 
 
 ### Question 1
 ```{r Q1}
 quiz(
   question("True or false (check all that apply)", 
     type='multiple',         
-    answer("In regression an outlier is a value with an unsual value of the dependent variable given the independent  variables", correct=TRUE),
-    answer("Observations with high leverage have (an) unusual independant variable.", correct=TRUE ),
-    answer("The deviance is a measure of leverage"),
-    answer("Cook's distance says something about how influential an observation is", correct=TRUE),
-    answer("The dfbetas say something about how influential an observation is is", correct=TRUE),
+    answer("In regression an outlier is a value with an unusual value of the dependent variable given the independent variables", correct=TRUE),
+    answer("Observations with high leverage have unusual values of the independent variables.", correct=TRUE ),
+    answer("The deviance is a measure of leverage."),
+    answer("Cook's distance says something about how influential an observation is.", correct=TRUE),
+    answer("The dfbetas say something about how influential an observation is.", correct=TRUE),
         allow_retry = TRUE, random_answer_order = FALSE
   )
 )
@@ -41,17 +41,17 @@ quiz(
 
 ### Question 2
 
-In a post-marketing surveillance study, three different antibiotics were compared with respect to adverse reactions in patients with either tonsillitis, sinusitis or a bronchopulmona:ry infection. Each treatment group contained about 1850 patients. 
+In a post-marketing surveillance study, three different antibiotics were compared with respect to adverse reactions in patients with either tonsillitis, sinusitis or a bronchopulmonary infection. Each treatment group contained about 1850 patients. 
 Among others, the following variables were observed:
 - `TREATMNT`: antibiotic treatment (l=amoxicillin, 2=doxycyclin, 3=roxitromycin)
-- `AE`: adverse event (O=no event, 1 =at least one event))
+- `AE`: adverse event (O=no event, 1=at least one event)
 - `AGE`: age of the patient in years
 - `GENDER`: gender (1=man, 2=woman)
-- `DIAG`: diagnosis (1 =tonsillitis, 2=sinusitis, 3= bronchopulmonary infection)
+- `DIAG`: diagnosis (1=tonsillitis, 2=sinusitis, 3=bronchopulmonary infection)
 
 The goal of the study was to look for differences in incidence of adverse events
 between the three antibiotics. First the crude differences are considered by simple
-crosstabulation. Also a logistic regresson model was estimated using only the treatment
+crosstabulation. Also a logistic regression model was estimated using only the treatment
 which had a (optimized) minus two log likelihood of 2861.92. 
 
 |    |       | Treatment |            |              |      |
@@ -67,7 +67,7 @@ which had a (optimized) minus two log likelihood of 2861.92.
 quiz(
   question("What is the odds ratio of an adverse event of doxycyclin versus roxitromycin?",
     answer("Less than 0.3",message = '(133/1720)/(67/1823)'),
-    answer("Between 0.3 and 0.6%",message = '(133/1720)/(67/1823)'),
+    answer("Between 0.3 and 0.6",message = '(133/1720)/(67/1823)'),
     answer("Between 0.6 and 1.5",message = '(133/1720)/(67/1823)'),
     answer("Between 1.5 and 3", correct=TRUE),
     answer("More than 3", message = '(133/1720)/(67/1823)'),
@@ -98,11 +98,11 @@ is fitted. Study the provided output. Which of the following statements is true?
 ```{r Q3}
 quiz(
   question("Which of the following statements is true? (check all that apply)",
-    answer("Age and sex are strong confounders",message = "If Age and sex are strong confounders we would expect the odds ratios to be different from the unadjusted analysis above"),
-    answer("Gender, age and age squared are jointly significant  (p<0.05)", correct=TRUE, 
-           message = "You could perform a likelihood ratio test using the (-2 log)likelihoods in the outputs above"),
-    answer("If this model would be correct,the probability of having an adverse event is highest for people that are approximately 50 years old (if other variables are constant)", correct=TRUE, message="Consider that ax^2+bx+c has its extreme at -b/2a (just take the derivative). So because a and b are in the table of coefficients we can derive the age where risk is highest "),
-    answer("The upper bound of the odds ratio of man is approximately 1.9", correct=TRUE, message = "first calculate the upperbound on the log-odds scale then transform" ),
+    answer("Age and sex are strong confounders.",message = "If Age and sex are strong confounders we would expect the odds ratios to be different from the unadjusted analysis above."),
+    answer("Gender, age and age squared are jointly significant  (p<0.05).", correct=TRUE, 
+           message = "You could perform a likelihood ratio test using the (-2 log)likelihoods in the outputs above."),
+    answer("If this model is correct,the probability of having an adverse event is highest for people that are approximately 50 years old (if other variables are constant)", correct=TRUE, message="Consider that ax^2+bx+c has its extreme at -b/2a (just take the derivative). So because a and b are in the table of coefficients we can derive the age where risk is highest."),
+    answer("The upper bound of the odds ratio of Man is approximately 1.9", correct=TRUE, message = "First calculate the upperbound on the log-odds scale then transform." ),
     allow_retry = TRUE, random_answer_order = FALSE
   )
 )
@@ -110,16 +110,16 @@ quiz(
 
 ### Question 5
 
-In this question you are being asked to calculate an odds ratio that does not directly correspond to a single coefficient in the table above. Remember that if needed you can always derive the odds ratio as the antilog of the difference in log odds (like we did to derive the interpretation of the coeffcients in the logistic regression model).
+In this question you are being asked to calculate an odds ratio that does not directly correspond to a single coefficient in the table above. Remember that if needed you can always derive the odds ratio as the antilog (exponential) of the difference in log odds (like we did to derive the interpretation of the coefficients in the logistic regression model).
 
 ```{r Q5}
 quiz(
-  question("What is the odds ratio of having an adverse event when treated with doxycyclin relative to being treated with amoxicillin all other covariates being equal. )",
-    answer("Less than zero",message = 'remember that odds ratios should be positive'),
+  question("What is the odds ratio of having an adverse event when treated with doxycyclin relative to being treated with amoxicillin, all other covariates being equal? )",
+    answer("Less than zero",message = 'Remember that odds ratios should be positive.'),
     answer("Between 0 and 0.33"),
     answer("Between 0.33 and 0.66", correct=TRUE),
     answer("Between 0.66 and 1"),
-    answer("More than 1", message = 'fill in the betas and Xs in the linear predictor and convert to odds'),
+    answer("More than 1", message = 'Fill in the betas and Xs in the linear predictor and convert to odds.'),
     allow_retry = TRUE, random_answer_order = FALSE
   )
 )
@@ -132,11 +132,11 @@ quiz(
 ```{r Q6}
 quiz(
   question("What is the probability of an adverse event of a 50 years old man treated with roxy)",
-    answer("Less than zero",message = 'remember that probabilities should be between 0 and 1'),
-    answer("Between 0 and 2 %", message = 'fill in the betas and Xs in the linear predictor and convert to odds'),
+    answer("Less than zero",message = 'Remember that probabilities should be between 0 and 1.'),
+    answer("Between 0 and 2%", message = 'Fill in the betas and Xs in the linear predictor and convert to odds.'),
     answer("Between 2% and 4%", correct=TRUE),
-    answer("Between 4% and 10%", message = 'fill in the betas and Xs in the linear predictor and convert to odds'),
-    answer("More than 10%", message = 'fill in the betas and Xs in the linear predictor and convert to odds'),
+    answer("Between 4% and 10%", message = 'Fill in the betas and Xs in the linear predictor and convert to odds.'),
+    answer("More than 10%", message = 'Fill in the betas and Xs in the linear predictor and convert to odds.'),
     allow_retry = TRUE, random_answer_order = FALSE
   )
 )
@@ -144,9 +144,9 @@ quiz(
 
 ## Exercises 
 
-In this exercise we analyze the fracture data with logistic regression in R. This is a study concerning neurological deficit in thoracolumbar burst fractures. Between January 1981 and January 1991, 139 patients with thora-columbar or lumbar burst fractures were treated in the Department of Orthopaedics and the Department of Neurosurgery of the Academic Hospital Dijkzigt of the Erasmus University of Rotterdam (Fontijne WPJ et al., J.of Bone & Joint Surgery, in press).
-A.o., the following variables were observed:
+In this exercise we analyze the fracture data with logistic regression in R. This is a study concerning neurological deficit in thoracolumbar burst fractures. Between January 1981 and January 1991, 139 patients with thoracolumbar or lumbar burst fractures were treated in the Department of Orthopaedics and the Department of Neurosurgery of the Academic Hospital Dijkzigt of the Erasmus University of Rotterdam (Fontijne WPJ et al., J.of Bone & Joint Surgery, in press).
 
+The following variables were observed:
 
 - `ID`: Subject number
 
@@ -156,13 +156,10 @@ A.o., the following variables were observed:
 
 - `STEN`: percentage spinal canal stenosis
 
-
-
-
 ### Question 1
 
 
-Display a couple of records from the data set to see what it looks like. You could use the `head` function. Make a cross table of the relation between the location of the fracture and the occurrence of neurological deficit. Is this relation significant?
+Display a couple of records from the data set to see what it looks like. You could use the `head` function. Make a contingency table of the relation between the location of the fracture and the occurrence of neurological deficit. Is this relation statistically significant?
 
 ```{r P1, exercise=TRUE, exercise.lines = 10, eval=FALSE}
 
@@ -188,19 +185,19 @@ chisq.test(tab3a) # seems there is no relationship
 ### Question 2
 
 
-Next look at the relationship between percentage stenosis and localization, describe and test it. How can you test which groups are significant different? 
+Next look at the relationship between percentage stenosis and localization, describe and test it. How can you test which groups are significantly different? 
 
 ```{r P2-setup}
 
 ```
 
 ```{r P2, exercise=TRUE, exercise.lines = 10, eval=FALSE}
-# To describe the relation you can visualise it. For example by a boxplot. The 
-# syntax is boxplot(outcome~group, data= dataset)
-# Now estimate a logistic regression model using glm
-# remember that the coef and confint can be used to get 
-# the coefficients and their confidence intervals
-# drop1 can be used to perform LR tests for all coefficients
+# To describe the relation you can visualize it. For example by a boxplot. The 
+# syntax is boxplot(outcome~group, data= dataset).
+# Now estimate a logistic regression model using glm.
+# Remember that the coef and confint can be used to get 
+# the coefficients and their confidence intervals.
+# drop1 can be used to perform LR tests for all coefficients.
 
 ```
 
@@ -208,26 +205,26 @@ Next look at the relationship between percentage stenosis and localization, desc
 
 # The code is:
 #boxplot(~, data=)
-# estimate the relationship using LOGISTIC regression
+#Estimate the relationship using LOGISTIC regression
 #glm3b<-glm(.~., family=, data=)
-# Now Describe model by OR and CI
+#Now Describe model by OR and CI
 
-# test using a LR test
+#Test using a LR test
 #drop1(, test = 'LRT')  
 
 ```
 ```{r P2-hint-2}
 # The code is:
 boxplot(STEN~DEF, data=fracture)
-# estimate the relationship using LOGISTIC regression
+# Estimate the relationship using LOGISTIC regression
 glm3b<-glm(DEF~STEN, family=binomial, data=fracture)
 # Describe model by OR and CI
 exp(coef(glm3b)) 
 exp(confint(glm3b))
-# test using a LR test
+# Test using a LR test
 drop1(glm3b, test = 'LRT')  # very significant
 
-# or do ttest
+# or do a t-test
 t.test(STEN~ DEF, data=fracture, var.equal = FALSE)
 # also very significant
 
@@ -235,7 +232,7 @@ t.test(STEN~ DEF, data=fracture, var.equal = FALSE)
 
 ### Question 3
 
-Next look at the relationship between percentage stenosis and localization, describe and test it. How can you test which groups are significant different?
+Next look at the relationship between percentage stenosis and localization, describe and test it. How can you test which groups are significantly different?
 
 ```{r P3-setup}
 
@@ -266,15 +263,14 @@ summary(lm33)
 
 Now we will use logistic regression to examine the effect of percentage stenosis and localization on the probability of neurological deficit simultaneously.	Specify a model with the covariates LOC, STEN and the interaction between these two. Is it justified to fit a model without the interaction term?
 
-
 ```{r P4, exercise=TRUE, exercise.lines = 10, eval=FALSE}
 drop1(___, test=___)
 
 ```
 
 ```{r P4-hint-1}
-# Estimate a logistic regression model using glm
-# use the drop1 or anova functions to perform a LR test 
+# Estimate a logistic regression model using glm.
+# Use the drop1 or anova functions to perform a LR test.
 ```
 
 ```{r P4-hint-2}
@@ -291,13 +287,12 @@ anova(glm34, glm340, test='LRT')
 
 ```
 
-
 ### Question 5
 
 Now fit a logistic model without the interaction term. Save the predicted probabilities. We will use this variable later.
 Looking at the results answer the following questions:
 -	Does the percentage stenosis have a significant effect on neurological deficit, adjusted for localization? Describe the estimated effect.
--	Is localization significantly associated with the probability of neurological deficit (adjusted for percentage stenosis)? What is the P-value?
+-	Is localization significantly associated with the probability of neurological deficit (adjusted for percentage stenosis)? What is the p-value?
 -	What are the odds ratios of the localization categories thoracic and thoracolumbar versus lumbar?
 ```{r P5-setup}
 
@@ -317,7 +312,7 @@ exp(coef(glm35))
 exp(confint(glm35))
 drop1(glm35, test='LRT')
 # STENOSIS is significant 
-# odds increase by 3% for each unit increase
+# Odds increase by 3% for each unit increase
 # Location is not significant
 # save predicted
 preds <- predict(glm35,type = 'response')
@@ -326,7 +321,7 @@ preds <- predict(glm35,type = 'response')
 
 ### Question 6
 
-Now fit the model again after changing the coding of the dummies for LOC such that thoracic is used as reference. In `glm` we can do this by including `c(LOC, base=3)` as a model term (3 because thoracic is the third level of this variable which you can check using the `levels` function). Before you run this model, try to find out what will be the estimates for the Constant and for the dummies. When you run the new model Check whether the estimates are as expected.
+Now fit the model again after changing the coding of the dummies for LOC such that thoracic is used as reference. In `glm` we can do this by including `c(LOC, base=3)` as a model term (3 because thoracic is the third level of this variable which you can check using the `levels` function). Before you run this model, try to find out what will be the estimates for the Constant and for the dummies. When you have run the new model, check whether the estimates are as expected.
 
 ```{r P6-setup}
 ```
@@ -339,15 +334,15 @@ exp(coef(glm36))
 
 ```{r P6-hint-1}
 
-# Write down the equation of the model
-# We know the how do the log odds change when we go change between the levels of 
-# LOC. So how would they change if we go from thoracic to the other levels.
-# knowing delta log odds allows us to compute the OR
+# Write down the equation of the model.
+# We know  how to calculate the log odds  between the levels of 
+# LOC. So what would the log odds be from from thoracic to the other levels?
+# Knowing the log odds allows us to compute the OR.
 
 ```
 
 ```{r P6-hint-2}
-# When LOC(thoracic) will be reference:
+# When LOC(thoracic) will be the reference:
 #  Constant: -1.373 - 1.307 = -2.680
 # LOC(1) : lumbar/thracic = +1.307
 # LOC(2) : thoracolumbar/thoracic = -0.353 - (-1.307) = 0.954
@@ -363,7 +358,7 @@ exp(coef(glm36))
 
 ### Question 7
 
-Next switch to the 'Deviation coding' contrast for LOC instead by running the command:
+Next switch to the 'Deviation coding' contrast for LOC instead, by running the command:
  `contrasts(fracture$LOC) <- contr.sum(3)` 
 In this case the effect of category 3 of LOC (the last category) is the negative sum of the effects of the categories 1 and 2. 
 Fit the model using this coding and compare the estimated coefficients again.
@@ -419,7 +414,7 @@ glm35 <-glm(DEF~LOC+STEN,data=fracture, family = binomial)
 ```
 
 ```{r P8-hint-2}
-# We can make a dataset for prediction with
+# We can make a data set for prediction with
 preddata<-data.frame(LOC=factor('thoracic', levels = levels(fracture$LOC)), STEN=60)
 
 ```
@@ -434,7 +429,7 @@ predict(glm35, newdata = preddata, type='response' )
 
 ### Question 9
 
-The functions cooks.distance and dfbetas gives you the cooks.distances and the dfbetas of the observations. Use:
+The functions cooks.distance and dfbetas gives you the Cook's distances and the dfbetas of the observations. Use:
 ` coo_1 <- cooks.distance(glm35)`
 And try to find the patients with large value for Cook's distance.
 You may also sort the cases by the variable (in descending order) and print the cases with a high value. 
@@ -449,7 +444,7 @@ glm35 <-glm(DEF~LOC+STEN,data=fracture, family = binomial)
 ```
 
 ```{r P9-hint-1}
-# use the code as isn the question
+# Use the code as in the question.
 ```
 
 ```{r P9-hint-2}
@@ -458,17 +453,15 @@ diagnost3<- data.frame(rstudent(glm35), hat=hatvalues(glm35),dfbetas(glm35), coo
 head(diagnost3[order(diagnost3$cook,decreasing = TRUE),], 10)
 par(mfrow=c(2,2))
 plot(glm35)
-# of interest is mainly the last plot 
-
+# Of interest is mainly the last plot.
 
 # All seems reasonable:
-# there is one observation (1) with a high value for cooks diagnostic (the pearson residual is quite high). 
-# There is also a value for which the hat value is quite large (46-the combination of LOC=LUMBAR and STEN as high as 70 is unsusual)
-# For some other observations Cooks diagnostic and the dffit is also a bit high
-
+# there is one observation (1) with a high value for Cook's diagnostic (the Pearson residual is quite high). 
+# There is also a value for which the hat value is quite large (46-the combination of LOC=LUMBAR and STEN as high as 70 is unusual)
+# For some other observations Cook's diagnostic and the dffit are also a bit high
 
 #
-# another usefull function is:
+# another useful function is:
 # influence.measures(glm35)
 influence.measures(glm35)
 ```
@@ -476,7 +469,6 @@ influence.measures(glm35)
 ### Question 10
 
 Plot the area under the AUC curve for the model you estimated in question 5 (which we have called `glm35`) using the `ROC` function of the `Epi` package. Also compute Nagelkerke's R2 measure. For this you can use the `PseudoR2` function in the `DescTools` package. The packages `Epi` and `DescTools` are already loaded.
-
 
 ```{r P10-setup}
 glm35 <-glm(DEF~LOC+STEN,data=fracture, family = binomial)
@@ -487,7 +479,7 @@ glm35 <-glm(DEF~LOC+STEN,data=fracture, family = binomial)
 ```
 
 ```{r P10-hint-1}
-# The ROC functions needs the predicted values of the model and the true outcomes as inputs. See the course notes for details.
+# The ROC functions need the predicted values of the model and the true outcomes as inputs. See the course notes for details.
 ```
 
 ```{r P10-hint-2, eval=FALSE}

@@ -5,7 +5,7 @@ output:
      allow_skip: true
 tutorial:
   id: "io.shinyapps.erasmusmc.ordreg"
-  version: 0.929     
+  version: 0.930     
 runtime: shiny_prerendered
 ---
 
@@ -30,14 +30,12 @@ The following questions test your knowledge about ordinal logistic regression
 
 ### Question 1
 
-
-
 ```{r Q1}
 quiz(
-  question("What are the odds that are moddelled in the proportional odds model?",
-    answer("The odds of being in category k vs the odds of being in any lower category"),
-    answer("The ods of being in category k vs being in caegory k-1"),
-    answer("The odds of being at least in category k  vs being in a any category lower than k", correct=TRUE),
+  question("What are the odds that are modeled in the proportional odds model?",
+    answer("The odds of being in category k versus the odds of being in any lower category"),
+    answer("The ods of being in category k versus being in caegory k-1"),
+    answer("The odds of being at least in category k  versus being in any category lower than k", correct=TRUE),
     answer("the odds of advancing to category k conditional of being in category k-1 or higher"),
         allow_retry = TRUE, random_answer_order = FALSE
   )
@@ -46,14 +44,13 @@ quiz(
 
 ### Question 2
 
-
 ```{r Q2}
 quiz(
-  question("Select all true statements?",
-    answer("The continuation ratio model is a model for an ordinal response",correct = TRUE),
-    answer("The Probit model is a model for binary outcomes", correct=TRUE),
-    answer("The polytomous regression model can only be used if the response is ordinal"),
-    answer("The zero inflated Poisson model is a model for overdispersed count data",correct = TRUE),
+  question("Select all true statements:",
+    answer("The continuation ratio model is a model for an ordinal response.",correct = TRUE),
+    answer("The probit model is a model for binary outcomes.", correct=TRUE),
+    answer("The polytomous regression model can only be used if the response is ordinal."),
+    answer("The zero inflated Poisson model is a model for overdispersed count data.",correct = TRUE),
         allow_retry = TRUE, random_answer_order = FALSE, type='multiple'
   )
 )
@@ -77,7 +74,7 @@ table(arthritis$arthritis_fu)
 
 ### Question 2
 
-Now make a crosstabulation of `arthritis_fu`, and `baseline` by treatment. Also look at the crosstabulation of these variables against each other.
+Now make a contingency table (crosstabulation) of `arthritis_fu`, and `baseline` by treatment. Also look at the contingency table of these variables against each other.
 
 
 ```{r P2, exercise=TRUE, exercise.lines = 10}
@@ -92,7 +89,7 @@ table(arthritis$baseline, arthritis$arthritis_fu)
 
 ### Question 3
 
-The dataset is a bit small to consider all five levels of the outcome. Therefore we combine 'very poor' and 'poor' and 'good' and 'very good'. For convinience, we do the same with the baseline score.
+The data set is a bit small to consider all five levels of the outcome. Therefore we combine 'very poor' and 'poor' and 'good' and 'very good'. For convenience, we do the same with the baseline score.
 
 ```{r P3, exercise=TRUE, exercise.lines = 10}
 levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
@@ -133,12 +130,12 @@ po1<-polr(arthritis_fu~trt, data=arthritis)
 summary(po1)
 ```
 
-Observe that there are two intercepts. One for each cutpoint that devide the distribution of the latent variable into the three groups defined by the outcome (poor, fair and good). 
+Observe that there are two intercepts. One for each cutpoint that divides the distribution of the latent variable into the three groups defined by the outcome (poor, fair and good). 
 
 
 ### Question 5
 
-To interpret the coefficients it is easier to convert them to odds ratios. You can do this in the same way is in a binary logistic regression model using the `coef` and `exp` functions. Also compute a confidence interval
+To interpret the coefficients it is easier to convert them to odds ratios. You can do this in the same way as in a binary logistic regression model using the `coef` and `exp` functions. Also compute a confidence interval.
 ```{r P5-setup}
 levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
                                    "fair"="fair",
@@ -169,7 +166,7 @@ exp(coef(po1))
 exp(confint(po1))
 
 ```
-The OR is 1.6 so we estimate that odds of being in a gigher category (fair+good vs poor and good vs fair+poor) are 1.6 times as high. Observe that 1 is not included in the confidence interval so the effect of treatment is significant.
+The OR is 1.6 so we estimate that odds of being in a higher category (fair+good vs poor and good vs fair+poor) are 1.6 times as high. Observe that 1 is not included in the confidence interval so the effect of treatment is significant.
 
 ### Question 6
 
@@ -240,11 +237,11 @@ po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
 ## Exercise: Continuation ratio model
 
 ### Question 8
-The continuation ratio model is an other way to estimate a model with an ordinal response. This model models the log odds of the various categories as: 
+The continuation ratio model is another way to estimate a model with an ordinal response. This model models the log odds of the various categories as: 
 $$
 \frac{P(Y_i=k|P \geq k)}{1-P(Y_i=k|P \geq k)}= \sum_0^k \alpha_k X_i'\beta
 $$
-An advantage of this model specification is that afer special preparation of the data set we can use software routines for normal binary logistic regression to fit. Here we use the the function `cr.setup` from the `rms` package. This function creates a list with several variables: `y` is a new response variable that tells us if the response is above a certain cut-point between two reponses. `cluster` specifies which border between which of the levels we are considering. The variables `subs` and `reps` make merging with the original data easier. The details are not to important now, just follow the example:
+An advantage of this model specification is that after special preparation of the data set we can use software routines for normal binary logistic regression to fit it. Here we use the function `cr.setup` from the `rms` package. This function creates a list with several variables: `y` is a new response variable that tells us if the response is above a certain cut-point between two responses. `cluster` specifies which border between which of the levels we are considering. The variables `subs` and `reps` make merging with the original data easier. The details are not to important now, just follow the example:
 
 
 
@@ -300,10 +297,10 @@ art_cr <- data.frame(arthritis_cc[cr_info$subs, ], y=cr_info$y, border=cr_info$c
 ```
 
 ```{r P7cr-hint,  exercise.lines = 10}
-cr1<-glm(y~trt+border, data=art_cr) 
+cr1<-glm(y~trt+border, data=art_cr, family = 'binomial') 
 summary(cr1)
 exp(coef(cr1))
 exp(confint(cr1))
 ```
 
-The interpretation of the coefficients is as follows: When taking placebo the log odds of having a poor outcome (vs all other outcomes) are 0.24. The log odds of having a fair outcome given that it is at least fair (so fair vs good) in the placebo group is 0.24+0.24=0.48. Both log odds decrease with 0.08 when patients are on Auronfin.   
+The interpretation of the coefficients is as follows: When taking placebo, the log odds of having a poor outcome (versus all other outcomes) is -1.18. The log odds of having a fair outcome given that it is at least fair (so fair vs good) in the placebo group is -1.18+1.16=-0.02. Both log odds decrease by 0.42 when patients are on Auronfin.   

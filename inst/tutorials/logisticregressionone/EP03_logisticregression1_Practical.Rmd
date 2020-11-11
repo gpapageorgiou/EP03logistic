@@ -42,13 +42,13 @@ The following questions test your knowledge about logistic regression, odds and 
 quiz(
   question("True or false (check all correct statements)", 
     type='multiple',         
-    answer("The confidence interval around an odds ratio is symetric",
-           message="The confidence inteval of the coefficients is symetric. However when transformed to odds ratios it no longer is."),
-    answer("The log of the coefficients of an logistic regression can be interpreted as odds ratios", message="We need the antilog (exp) to transform the coefficients to odds ratios"),
+    answer("The confidence interval around an odds ratio is symmetric",
+           message="The confidence intervals of the coefficients are symmetric. However when transformed to odds ratios they no longer are."),
+    answer("The log of the coefficients of an logistic regression can be interpreted as odds ratios", message="We need the antilog (exponential function) to transform the coefficients to odds ratios"),
     answer("An odds of one corresponds to a probability of 50%", correct=TRUE),
     answer("When a probability is one, the corresponding odds are infinite", correct=TRUE),
     answer("The logistic function cannot reach values larger than one", correct=TRUE),
-    answer("The logit function can be used to convert probabilities to odds ", correct=TRUE),
+    answer("The logit function can be used to convert probabilities to log odds ", correct=TRUE),
         allow_retry = TRUE, random_answer_order = FALSE
   )
 )
@@ -59,9 +59,9 @@ quiz(
 quiz(
   question("True or false (check all that apply)", 
     type='multiple',         
-    answer("The logistic regression model can only be used with continuous independent variables", message="Remember that the independent variables apear at the right hand side of the model equation (the Xs). Check the course slides for the types of variables you can put there. "),
-    answer("The logistic regression model can only be used with continuous dependent variables", message="When the response variable is continuous we an use linear regression. Check why for certain response types we may not use this model."),
-    answer("The logistic regression model can only be used with binary independent variables", message="Remember that the independent variables apear at the right hand side of the model equation (the Xs). Check the course slides for the types of variables you can put there. "),
+    answer("The logistic regression model can only be used with continuous independent variables", message="Remember that the independent variables appear on the right-hand side of the model equation (the Xs). Check the course slides for the types of variables you can put there."),
+    answer("The logistic regression model can only be used with continuous dependent variables", message="When the response variable is continuous we an use linear regression. Check why we cannot use this model for certain response types."),
+    answer("The logistic regression model can only be used with binary independent variables", message="Remember that the independent variables appear on the right-hand side of the model equation (the Xs). Check the course slides for the types of variables you can put there."),
     answer("The logistic regression model can only be used with binary dependent variables", correct=TRUE),
         allow_retry = TRUE, random_answer_order = FALSE
   )
@@ -70,13 +70,13 @@ quiz(
 
 ### Question 3
 
-In Clements et. al. (1999) the effect of a high dose vs a low dose of D-Penicillamine in early diffuse systemic scleloris is investigated. 25 of the 36 patients that received a low dose responded while in the high dose group 17 out of 32 responded.
+In Clements et. al. (1999) the effect of a high dose vs a low dose of D-Penicillamine in early diffuse systemic sclerosis is investigated. 25 of the 36 patients that received a low dose responded, whereas in the high dose group 17 out of 32 responded.
 ```{r Q3, eval=!static}
 
 quiz(
   question("What is the probability of responding in the low dose group?",
-    answer("Less than 40%", message="To calculate the estimated probabilities simply divide the number of responders in the low dose group to the total number of patients in this group"),
-    answer("Between 40% and 60%", message="To calculate the estimated probabilities simply divide the number of responders in the low dose group to the total number of patients in this group"),
+    answer("Less than 40%", message="To calculate the estimated probabilities simply divide the number of responders in the low dose group by the total number of patients in this group"),
+    answer("Between 40% and 60%", message="To calculate the estimated probabilities simply divide the number of responders in the low dose group by the total number of patients in this group"),
     answer("Between 60% and 80%", correct=TRUE),
     answer("More than 80%"),
         allow_retry = TRUE, random_answer_order = FALSE, 
@@ -91,9 +91,9 @@ quiz(
 ```{r Q4, eval=!static}
 quiz(
   question("What are the odds of responding in the low dose group?",
-    answer("Less than 0.5", message="To calculate the estimated probabilities simply divide the number of responders in the low dose group to the number of non-responders"),
-    answer("Between 0.5 and 1", message="To calculate the estimated probabilities simply divide the number of responders in the low dose group to the number of non-responders"),
-    answer("Between 1 and 2", message="To calculate the estimated probabilities simply divide the number of responders in the low dose group to the number of non-responders"),
+    answer("Less than 0.5", message="To calculate the estimated odds simply divide the number of responders in the low dose group by the number of non-responders"),
+    answer("Between 0.5 and 1", message="To calculate the estimated odds simply divide the number of responders in the low dose group by the number of non-responders"),
+    answer("Between 1 and 2", message="To calculate the estimated odds simply divide the number of responders in the low dose group by the number of non-responders"),
     answer("More than 2", correct=TRUE),
     allow_retry = TRUE, random_answer_order = FALSE,
     incorrect="Divide the probability of responding by the probability of not responding or equivalently divide the number of responders by the number of non-responders"
@@ -137,11 +137,11 @@ quiz(
 ```{r Q7, eval=!static}
 quiz(
   question("What is the upper limit of the 95% confidence interval of odds ratio of the dose? (high vs low)",
-    answer("smaller than 0.5",message = "Compute OR (high vs low!) take log compute CI and transform back"),
-    answer("between 0.5 and 1",message = "Compute OR (high vs low!) take log compute CI and transform back"),
-    answer("between 1 and 1.5", correct=TRUE),
-    answer("between 1.5 and 2",message = "Compute OR (high vs low!) take log compute CI and transform back"),
-    answer("larger than 2",message = "Compute OR (high vs low!) take log compute CI and transform back"),
+    answer("Smaller than 0.5",message = "Compute OR (high vs low!), take log, compute CI and transform back"),
+    answer("Between 0.5 and 1",message = "Compute OR (high vs low!), take log, compute CI and transform back"),
+    answer("Between 1 and 1.5", correct=TRUE),
+    answer("Between 1.5 and 2",message = "Compute OR (high vs low!), take log, compute CI and transform back"),
+    answer("Larger than 2",message = "Compute OR (high vs low!), take log, compute CI and transform back"),
     allow_retry = TRUE, random_answer_order = FALSE
   )
 )
@@ -150,14 +150,14 @@ quiz(
 ## Exercises (p1)
 
 
-We will now examine how logistic regression can be used to investigate the risk of developing acute graft versus host disease after a bone marrow transplant. We will use the data set bmt which should already be imported in your work space.
+We will now examine how logistic regression can be used to investigate the risk of developing acute graft versus host disease after a bone marrow transplant. We will use the data set bmt, which should already be available in your work space.
 
-The purpose of the exercise is to learn to work with the R functions by which you can perform logistic regression (`glm`, `coef`, `confint`, `anova`, etc.). 
+The purpose of the exercise is to learn to work with the R functions for logistic regression (`glm`, `coef`, `confint`, `anova`, etc.). 
 ```{r, eval=FALSE}
 library(foreign)
 bmt <- read.spss("/path/to/file/BMT.sav", to.data.frame = TRUE)
 ```
-When reading in the SPSS file the file path between the quotes should correspond the location where the file is stored on your computer. R will give you a warning (as is frequently the case when importing SPSS files). In these exercises you can ignore this type of warning. 
+When reading in the SPSS file, the file path between the quotes should correspond the location where the file is stored on your computer. R will give you a warning (as is frequently the case when importing SPSS files). In these exercises you can ignore this type of warning. 
 Here (in the shiny app), we have already loaded the bmt data.
 
 ### Question 1
@@ -166,7 +166,7 @@ a) Define a new variable sexmatch with value 1 if the receiver and donor have th
 ```{r, eval=FALSE}
 bmt$sexmatch <- ifelse(bmt$sexrec==bmt$sexdon, 1, 0)
 ```
-b.	Make a cross table of the outcome agvhd against sexmatch using the `table` function. Add the proportions of healthy and deseased with the `prop.table` function. Use `chisq.test` to perform a chi2-test.
+b.	Make a contingency table of the outcome agvhd against sexmatch using the `table` function. Add the proportions of healthy and diseased with the `prop.table` function. Use `chisq.test` to perform a chi-square test.
 
 Is there a significant relation between these variables?
 
@@ -180,7 +180,7 @@ chisq.test(____)
 ```
 
 ```{r P1-hint-1}
-# Just fill in the blanks. Also see the R code at the end of the chapter 'Probabilities and Odds'
+# Just fill in the blanks. Also see the R code at the end of the chapter 'Probabilities and odds'
 ```
 ```{r P1-hint-2}
 # Use:
@@ -192,7 +192,7 @@ chisq.test(tab1b)
 ```
 
 ### Question 2
-Compute the odds ratio of the sexmatch = 1 versus sexmatch = 0. Use R as a calculator to calculate the odds ratio from the crosstabulation table.
+Compute the odds ratio of sexmatch = 1 versus sexmatch = 0. Use R as a calculator to calculate the odds ratio from the contingency table.
 
 ```{r P15, exercise=TRUE, exercise.lines = 10}
 
@@ -210,10 +210,9 @@ Compute the odds ratio of the sexmatch = 1 versus sexmatch = 0. Use R as a calcu
 
 ### Question 3
 
-
 Now we will look at the relation using logistic regression.
 
-In R we can estimate a logistic regression model using the command `glm()`The first parameter indicates the model formula. On the left side of the ~ sign the dependent variable is specified (here `agvhd`); on the right hand side the explanatory variables (here the single variable sexmatch). The parameter family indicates the distribution we use. The default model for a binomial distribution is the logistic regression model. The last parameter specifies the data set we use. 
+In R we can estimate a logistic regression model using the command `glm()`. The first parameter indicates the model formula. On the left-hand side of the ~ sign the dependent variable is specified (here `agvhd`); on the right hand side the independent/explanatory variables (here the single variable sexmatch). The parameter `family' indicates the distribution we use. The default model for a binomial distribution is the logistic regression model. The last parameter specifies the data set. 
 
 ```{r P2-setup}
 bmt$sexmatch <- ifelse(bmt$sexrec==bmt$sexdon, 1, 0)
@@ -223,7 +222,7 @@ bmt$sexmatch <- ifelse(bmt$sexrec==bmt$sexdon, 1, 0)
 glm1<-glm(___ ~ ____, family = ____, data=___)
 glm1
 ```
-If the response is a 0 /1 coded variable R the model predicts the log odds of the outcome that is coded 1. If the response is a factor by default the first level is the refence level so we model the log odds of the last level.
+If the response is a 0/1 coded variable, then in R the model predicts the log odds of the outcome that is coded 1. If the response is a factor, then by default the first level is the reference level, so that the log odds of the last level is modeled.
 
 
 ```{r P2-hint-1}
@@ -238,7 +237,7 @@ glm1
 
 ### Question 4
 
-Use the summary command on the returned object to obtain the estimated coefficients standard errors and p-values from a Wald test. The odds ratios can be obtained by using `exp(coef(glm1))`. The function `confint` is used to obtain confidence estimates, again the exp function transforms them to the odds-ratio scale. Compare the OR with the result you obtained when you calculated it by hand.
+Use the `summary` command on the returned object to obtain the estimated coefficients, standard errors and p-values from a Wald test. The odds ratios can be obtained by using `exp(coef(glm1))`. The function `confint` is used to obtain confidence intervals, again the `exp` function transforms them to the odds ratio scale. Compare the OR with the result you obtained when you calculated it by hand.
 
 
 ```{r P3-setup}
@@ -268,12 +267,12 @@ exp(confint(glm1))
 
 ```
 
-The odds ratio should be the same than the one you computed manually. The odds ratio is approximately a half indicating that we expect the odds of agvhd to be halved when the sex of the host matches that of the donor. The effect is not statistically significant at the 5% level according to the Wald test. Also 1 is included in the 95% confidence interval. (Usually the conclusion based on the confidence interval agrees with  that of the Wald test but this is not always the case as the methods on which they are based are different.)
+The odds ratio should be the same as the one you computed manually. The odds ratio is approximately 0.5 indicating that we expect the odds of agvhd to be halved when the sex of the host matches that of the donor. The effect is not statistically significant at the 5% level according to the Wald test. Also 1 is included in the 95% confidence interval. (Usually the conclusion based on the 95\% confidence interval agrees with  that of the Wald test but this is not always the case as the methods on which they are based are different.)
 
 ### Question 5
 
 
-Using `drop1(glm1, test='LRT')` we also obtain the p-values from a likelihood ratio (LR) test. Compare the results between the LR and Wald test. 
+Using `drop1(glm1, test='LRT')` we also obtain the p-values from a likelihood ratio (LR) test. Compare the results between the LR test and the Wald test. 
 
 ```{r P4-setup}
 bmt$sexmatch <- ifelse(bmt$sexrec==bmt$sexdon, 1, 0)
@@ -287,7 +286,7 @@ drop1(___, test=___)
 ```
 
 ```{r P4-hint-1}
-# Fill in the blanks. The code in the logistic regression chapter of the course notes explaines how to perform the different types of tests on the coefficient of a logistic regression model.
+# Fill in the blanks. The code in the logistic regression chapter of the course notes explains how to perform the different types of tests on the coefficients of a logistic regression model.
 ```
 
 ```{r P4-hint-2}
@@ -295,7 +294,7 @@ drop1(___, test=___)
 drop1(glm1, test='LRT')
 ```
 
-Here the LRT closely agrees with the Wald test. 
+Here the LR test closely agrees with the Wald test. 
 
 ## Exercises (p2)
 
@@ -303,7 +302,7 @@ We will now look at the effect of a continuous variable on the odds of `agvhd`.
 
 ### Question 6
 
-Specify a model using `agedon` as covariate. What is the estimated odds ratio of this continuous variable and the confidence interval? What is the meaning of the odds ratio? Call the estimated model `glmAge`.
+Specify a model using `agedon` as independent variable. What is the estimated odds ratio of this continuous variable and the confidence interval? What is the meaning of the odds ratio? Call the estimated model `glmAge`.
 
 ```{r P5-setup}
 bmt$sexmatch <- ifelse(bmt$sexrec==bmt$sexdon, 1, 0)
@@ -324,17 +323,16 @@ glmAge<-glm(agvhd ~ agedon, family = 'binomial', data=bmt)
 summary(glmAge)
 exp(coef(glmAge))
 exp(confint(glmAge))
-# For every year that the donor is older the odds of agvhd increase with a factor of 1.034
+# For every year that the donor is older, the odds of agvhd increase with a factor of 1.034,
 # all other things being equal
-# So for 10 years the effect is approximately 40%
+# So for 10 years the effect is approximately 40%.
 ```
 
-Now 1 is not included in the confidence interval suggesting that the effect of the age of the donor is unlikely to be caused by sampling error. 
-
+Now the value 1 is not included in the confidence interval suggesting that the effect of the age of the donor is unlikely to be caused by sampling error. 
 
 ### Question 7
 
-We are now going to plot the relation between the age of the donor and the estimated probabilities. We can use the `predict` function for this. The first argument is  the estimated `glm`. When we use `type = 'response'` we  obtain the predictions on the scale of the response (the 0-1 scale of probabilities, this in contrast to the scale of the linear predictor you will get when you use `type='link'`).
+We are now going to plot the relation between the age of the donor and the estimated probabilities. We can use the `predict` function for this. The first argument is the estimated `glm`. When we use `type = 'response'` we  obtain predictions on the scale of the response (the 0-1 scale of probabilities, this in contrast to the scale of the linear predictor that is obtained by specifying `type='link'`).
 
 ```{r P6-setup}
 bmt$sexmatch <- ifelse(bmt$sexrec==bmt$sexdon, 1, 0)
@@ -367,7 +365,7 @@ plot(x=bmt$agedon[order(bmt$agedon)],
 
 ### Question 8
 
-In the model above we assume a linear relation between the log odds for agedon and the outcome. To test this assumption we can add the square of agedon to the model. Add the quadratic term to the model below (hint: use I(agedon^2)). Call the model glmAge2. Is the quadratic term significant?
+In the model above we assume a linear relation between the log odds for agedon and the outcome. To test this assumption we can add the square of agedon to the model. Add the quadratic term to the model below (hint: use I(agedon^2)). Call the model glmAge2. Is the quadratic term statistically significant?
 ```{r P7-setup}
 bmt$sexmatch <- ifelse(bmt$sexrec==bmt$sexdon, 1, 0)
 glmAge<-glm(agvhd ~ agedon, family = 'binomial', data=bmt)
@@ -389,7 +387,7 @@ glmAge<-glm(agvhd ~ agedon+I(agedon^2), family = 'binomial', data=bmt)
 
 ## Exercises (p3)
 
-Now we will build a multivariable model using multiple explanatory variables.
+Now we will build a multivariable model using multiple independent/explanatory variables.
 
 ### Question 9
 
@@ -446,7 +444,7 @@ plot(x=___, y=____, type='p',
 ```
 
 ```{r P9-hint-1}
-# Fill in the blanks. See the course notes to see an example of ploting predicted values.
+# Fill in the blanks. See the course notes to see an example of plotting predicted values.
 ```
 
 ```{r P9-hint-2}

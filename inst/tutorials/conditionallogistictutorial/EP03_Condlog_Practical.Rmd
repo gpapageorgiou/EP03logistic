@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Quiz
 
-The following questions test your knowledge about conditional logistic regression
+The following questions test your knowledge about conditional logistic regression.
 
 ### Question 1
 
@@ -29,9 +29,9 @@ When we have case-control data we cannot use (unconditional) logistic regression
 ```{r Q1}
 quiz(
   question("True or false?",
-    answer("True", message = 'In unmatched studies you can always user regular logistic regression. Even in matched designs you just need a way to control for the matching factor; this does not always haveb to be contitioning.'),
+    answer("True", message = 'In unmatched studies you can always user regular logistic regression. Even in matched designs you just need a way to control for the matching factor; this does not always have to be conditioning.'),
     answer("False", correct=TRUE),
-        allow_retry = TRUE, random_answer_order = FALSE, incorrect= "Incorrect. Only when we have matched data with small strata unconditional logistic regression cannot be used." 
+        allow_retry = TRUE, random_answer_order = FALSE, incorrect= "Incorrect. Only when we have matched data with small strata, unconditional logistic regression cannot be used." 
   )
 )
 ```
@@ -44,7 +44,7 @@ quiz(
   question("True or false",
     answer("True", correct=TRUE),
     answer("False"),
-    allow_retry = TRUE, random_answer_order = FALSE, incorrect='Because the intercept in conditional logistic regression is influenced by the prevalence and the ratio of cases to controls we cannot estimate probabilities in the usual way.'
+    allow_retry = TRUE, random_answer_order = FALSE, incorrect='Because the intercept in conditional logistic regression is influenced by the prevalence and the ratio of cases to controls, we cannot estimate probabilities in the usual way.'
   )
 )
 ```
@@ -57,7 +57,7 @@ quiz(
   question("True or false",
     answer("True", correct = TRUE),
     answer("False"),
-    allow_retry = TRUE, random_answer_order = FALSE, incorrect='The stratifying factors are constant within the strata so cannot beestimated. Interaction effects that include the stratyfying factors and an other covariate generally can.'
+    allow_retry = TRUE, random_answer_order = FALSE, incorrect='The stratifying factors are constant within the strata so cannot be estimated. Interaction effects that include the stratifying factors and another covariate generally can be estimated.'
   )
 )
 ```
@@ -78,7 +78,6 @@ quiz(
 ## Exercises
 
 In this exercise we look at the data of a matched case-control study. The analysis to be used for this data is conditional logistic regression. We can perform this type of analysis with the `clogit` function which is located in the `survival` package. The data set we use is called endom and is already loaded.
-
 
 The data are from the Los Angeles study (reported by Mack e.a., 1976) of endometrial
 cancer. The aim was to study the effect of exegenous oestrogens on the risk of
@@ -114,7 +113,7 @@ Variables we will use are:
 
 ### Question 1
 
-First we recode the outcome as 0/1. We call this variable OUT. Estimate a conditional logistic regression model to investigate the effect of history of oestrogen use on endometrial cancer  using `clogit` cll the fiited model `fit1`. Interpret the results using `summary`.
+First we recode the outcome as 0/1. We call this variable OUT. Estimate a conditional logistic regression model to investigate the effect of history of oestrogen use on endometrial cancer  using `clogit`. Call the fitted model `fit1`. Interpret the results using `summary`.
 
 ```{r P1, exercise=TRUE, exercise.lines = 10, eval=FALSE}
 endom$OUT<-endom$OUTCOME=='case'
@@ -123,10 +122,10 @@ summary(___)
 
 ```
 ```{r P1-hint-1}
-# Use clogit to do conditional logistic regression. The first argument is the model formula
-# The outcome should be specified left of the ~-sign and the explatinary variables go on the 
-# right. Here we look at the effect of EST on OUT. (where OUT is based on outcome).
-# There is also the special argument stata() to indicate the stratum. At the end of the Conditional logistic regression chapter in the course notes an example is given of an analysis done in R.
+# Use clogit to do conditional logistic regression. The first argument is the model formula.
+# The outcome should be specified left of the ~-sign and the independent/explanatory variables go on the 
+# right. Here we look at the effect of EST on OUT (where OUT is based on outcome).
+# There is also the special argument strata() to indicate the stratum. 
 ```
 ```{r P1-hint-2}
 # Use:
@@ -154,12 +153,12 @@ anova(____)
 ```
 
 ```{r P2-hint-1}
-# Define the interactionterm yourself first and than estimate a conditional logistic
+# Define the interaction term yourself first and then estimate a conditional logistic
 # regression model like in the first exercise.
 ```
 ```{r P2-hint-2, eval=FALSE}
 # The code is:
-fit2 <- clogit(OUT ~ EST+EST:AGEC+  strata(STRATUM), data=endom)
+fit2 <- clogit(OUT ~ EST + EST:AGEC + strata(STRATUM), data=endom)
 summary(fit2)
 anova(fit2, fit1)
 ```
@@ -172,7 +171,7 @@ endom$OUT<-endom$OUTCOME=='case'
 fit1 <- clogit(OUT ~ EST + strata(STRATUM), data=endom)
 ```
 
-We think  `GALL`, `NON`, `OB` and `HYP` could be important variables. Extend model `fit1` to accommodate this. (we leave out the interaction this time) Use again the `summary()` method to get a detailed output and 
+We think  `GALL`, `NON`, `OB` and `HYP` could be important variables. Extend model `fit1` to accommodate this (we leave out the interaction this time). Use again the `summary()` method to get a detailed output and 
 interpret the results. Name the fitted model `fit3`.
 
 ```{r P3, exercise=TRUE, exercise.lines = 10}
@@ -190,7 +189,7 @@ summary(fit3)
 
 ### Question 4
 
-Perhaps the effect of EST is different if you have gall bladder desease. Add the interaction to the model. Check if it is significant using an chi2-test
+Perhaps the effect of EST is different if you have gall bladder disease. Add the interaction to the model. Check whether it is significant using an chi-square test.
 
 ```{r P4-setup}
 endom$OUT<-endom$OUTCOME=='case'
@@ -204,7 +203,7 @@ fit3 <- clogit(OUT ~ EST + GALL + NON + OB + HYP + strata(STRATUM), data = endom
 ```
 
 ```{r P4-hint-1}
-# Just add the interaction and use anova() function giving as arguments the two models
+# Just add the interaction and use the anova() function giving as arguments the two models.
 ```
 
 ```{r P4-hint-2, eval=FALSE}
@@ -215,9 +214,8 @@ anova(fit4, fit3)
 
 ### Question 5
 
-Now we also want to look at the dose of oestrogen. However the variable `DOS` missing for some individuals. When we do embedding tests we need to make sure we are comparing the same 
-individuals. This can be done using the complete.cases() function.
-Add the dose to the model  with EST + GALL + NON + OB + HYP and perform a chi2 test.
+Now we also want to look at the dose of oestrogen. However the variable `DOS` missing for some individuals. When we do embedding tests we need to make sure we are comparing the same individuals. This can be done using the complete.cases() function.
+Add the dose to the model  with EST + GALL + NON + OB + HYP and perform a chi-square test.
 
 
 ```{r P5-setup}
@@ -233,9 +231,9 @@ fit4<-clogit(OUT ~ EST + GALL+NON+OB+HYP+GALL*EST+ strata(STRATUM), data=endom)
 ```
 
 ```{r P5-hint-1, eval=FALSE}
-# Use
+# Use:
 # cc<- complete.cases(endom$DOS)
-
+```
 
 ```{r P5-hint-2, eval=FALSE}
 cc<-complete.cases(endom$DOS)
