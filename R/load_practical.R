@@ -18,7 +18,7 @@ load_practical <- function (name = NULL) {
   if (name %in% tutorialnames){
     learnr::run_tutorial(name, package = "EP03logistic")
   }else if (name %in% aliasnames){
-    o <- match('EP03_logisticregression_Practical2' , aliasnames)
+    o <- match(name , aliasnames)
     learnr::run_tutorial(tutorialnames[o], package = "EP03logistic")
   }else if("EP03Survival" %in% .packages()){
     ep03::load_practical(name)
