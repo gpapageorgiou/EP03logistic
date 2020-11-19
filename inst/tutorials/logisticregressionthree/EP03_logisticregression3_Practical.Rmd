@@ -190,7 +190,7 @@ glm2 <- glm(cbind(Npos, Nneg) ~ Method + Area + Vaccine.batch,
 ```
 
 ```{r P5, exercise=TRUE, exercise.lines = 10, eval=FALSE}
-# 
+
 
 ```
 

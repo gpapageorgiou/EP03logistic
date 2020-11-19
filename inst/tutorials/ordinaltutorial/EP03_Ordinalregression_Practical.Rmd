@@ -266,15 +266,14 @@ po1<-polr(arthritis_fu~trt, data=arthritis)
 ```
 
 ```{r P6cr, exercise=TRUE, exercise.lines = 10}
-arthritis_cc<- arthritis[complete.cases(arthritis$arthritis_fu),]
-cr_info <- with(arthritis_cc, cr.setup(arthritis_fu))
-art_cr <- data.frame(arthritis_cc[cr_info$subs, ], y=cr_info$y, border=cr_info$cohort)
-
-
 
 ```
 
-
+```{r P6cr-hint,  exercise.lines = 10}
+arthritis_cc<- arthritis[complete.cases(arthritis$arthritis_fu),]
+cr_info <- with(arthritis_cc, cr.setup(arthritis_fu))
+art_cr <- data.frame(arthritis_cc[cr_info$subs, ], y=cr_info$y, border=cr_info$cohort)
+```
 
 ### Question 9
 We can now use the `glm` function to estimate a logistic regression model on the resulting data set. Try this yourself do not forget to include the `border` variable. What are the odds ratios and their confidence intervals?
