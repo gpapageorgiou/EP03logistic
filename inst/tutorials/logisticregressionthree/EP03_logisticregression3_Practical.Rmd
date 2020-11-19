@@ -71,6 +71,7 @@ First plot the data set. What is the number of subjects that are tested, and how
 ```{r P1-hint-1}
 # You can use the sum command to add the numbers in the Ntested and Npos columns respectively.
 ```
+
 ```{r P1-hint-2}
 vaccination$Nneg <- with(vaccination, Ntested-Npos)
 vaccination
@@ -83,9 +84,11 @@ sum(vaccination$Nneg)
 
 Estimate a logistic regression model using only the `Method` as predictor. Keep the data in aggregated form. Call the model `glm1`. Also compute odds ratios and their confidence intervals.    
 
-```{r P2-setup, exercise=TRUE, exercise.lines = 10}
+```{r P2-setup}
 
 vaccination$Nneg <- with(vaccination, Ntested-Npos)
+
+
 ```
 
 
@@ -155,16 +158,20 @@ glm2 <- glm(cbind(Npos, Nneg) ~ Method + Area + Vaccine.batch,
 ```
 
 ```{r P4, exercise=TRUE, exercise.lines = 10}
+
 ```
 
 ```{r P4-hint-1}
 # Remember that in the deviance test for the goodness of fit, we compare the model with the saturated model.
+
 ```
 
 ```{r P4-hint-2}
 # The saturated model contains a parameter for each covariate pattern.
+
 ```
-```{r P4-solution}
+
+```{r P4-hint-3}
 glm_sat <- glm(cbind(Npos, Nneg) ~ Method*Area*Vaccine.batch,
             data=vaccination, family='binomial')
 
