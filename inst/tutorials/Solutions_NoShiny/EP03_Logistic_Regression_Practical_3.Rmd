@@ -1,5 +1,5 @@
 ---
-title: "EP03 Logistic Regression Practical 2"
+title: "EP03 Logistic Regression Practical 3"
 output: html_document
 ---
 
