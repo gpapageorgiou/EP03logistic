@@ -1,0 +1,149 @@
+---
+title: "EP03 Logistic Regression Practical 1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library('EP03logistic')
+data("bmt", package = "EP03logistic")
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+We will now examine how logistic regression can be used to investigate the risk of developing acute graft versus host disease after a bone marrow transplant. We will use the data set bmt, which should already be available in your work space.
+
+The purpose of the exercise is to learn to work with the R functions for logistic regression (`glm`, `coef`, `confint`, `anova`, etc.). 
+```{r, eval=FALSE}
+library(foreign)
+bmt <- read.spss("/path/to/file/BMT.sav", to.data.frame = TRUE)
+```
+When reading in the SPSS file, the file path between the quotes should correspond the location where the file is stored on your computer. R will give you a warning (as is frequently the case when importing SPSS files). In these exercises you can ignore this type of warning. 
+Here (in the shiny app), we have already loaded the bmt data.
+
+### Question 1
+
+
+a) Define a new variable sexmatch with value 1 if the receiver and donor have the same sex and value 0 if not. In R you can do this using:
+
+```{r}
+bmt$sexmatch <- ifelse(bmt$sexrec==bmt$sexdon, 1, 0)
+```
+
+b.	Make a contingency table of the outcome agvhd against sexmatch using the `table` function. Add the proportions of healthy and diseased with the `prop.table` function. Use `chisq.test` to perform a chi-square test.
+
+```{r}
+bmt$sexmatch <- ifelse(bmt$sexrec==bmt$sexdon, 1, 0)
+(tab1b <- table(bmt$agvhd, bmt$sexmatch,deparse.level = 2))
+prop.table(tab1b, margin = 2)   
+chisq.test(tab1b)
+```
+
+Is there a significant relation between these variables?
+
+
+### Question 2
+
+Compute the odds ratio of sexmatch = 1 versus sexmatch = 0. Use R as a calculator to calculate the odds ratio from the contingency table.
+
+```{r}
+# Fill in the formula (a/c)/(b/d)
+(21 / 63) / (32 / 50)
+```
+
+### Question 3
+
+Now we will look at the relation using logistic regression.
+
+In R we can estimate a logistic regression model using the command `glm()`. The first parameter indicates the model formula. On the left-hand side of the ~ sign the dependent variable is specified (here `agvhd`); on the right hand side the independent/explanatory variables (here the single variable sexmatch). The parameter `family' indicates the distribution we use. The default model for a binomial distribution is the logistic regression model. The last parameter specifies the data set.
+
+```{r}
+glm1<-glm(agvhd ~ sexmatch, family = 'binomial', data=bmt)
+glm1
+```
+
+### Question 4
+
+Use the `summary` command on the returned object to obtain the estimated coefficients, standard errors and p-values from a Wald test. The odds ratios can be obtained by using `exp(coef(glm1))`. The function `confint` is used to obtain confidence intervals, again the `exp` function transforms them to the odds ratio scale. Compare the OR with the result you obtained when you calculated it by hand.
+
+```{r}
+summary(glm1)
+exp(coef(glm1))
+exp(confint(glm1))
+```
+
+
+### Question 5
+
+Using `drop1(glm1, test='LRT')` we also obtain the p-values from a likelihood ratio (LR) test. Compare the results between the LR test and the Wald test. 
+
+```{r}
+drop1(glm1, test='LRT')
+```
+
+
+We will now look at the effect of a continous variable on the odds of `agvhd`. 	
+
+### Question 6
+
+Specify a model using `agedon` as independent variable. What is the estimated odds ratio of this continuous variable and the confidence interval? What is the meaning of the odds ratio? Call the estimated model `glmAge`.
+
+```{r}
+glmAge<-glm(agvhd ~ agedon, family = 'binomial', data=bmt)
+summary(glmAge)
+exp(coef(glmAge))
+exp(confint(glmAge))
+# For every year that the donor is older, the odds of agvhd increase with a factor of 1.034,
+# all other things being equal
+# So for 10 years the effect is approximately 40%.
+```
+
+### Question 7
+
+We are now going to plot the relation between the age of the donor and the estimated probabilities. We can use the `predict` function for this. The first argument is the estimated `glm`. When we use `type = 'response'` we  obtain predictions on the scale of the response (the 0-1 scale of probabilities, this in contrast to the scale of the linear predictor that is obtained by specifying `type='link'`).
+
+```{r}
+y <- predict(glmAge, type = 'response')
+plot(x=bmt$agedon[order(bmt$agedon)],  
+  y=y[order(bmt$agedon)],
+  type='l',
+  xlab='age donor',
+  ylab='Prob')
+```
+
+### Question 8
+
+In the model above we assume a linear relation between the log odds for agedon and the outcome. To test this assumption we can add the square of agedon to the model. Add the quadratic term to the model below (hint: use I(agedon^2)). Call the model glmAge2. Is the quadratic term statistically significant?
+
+```{r}
+glmAge<-glm(agvhd ~ agedon+I(agedon^2), family = 'binomial', data=bmt)
+```
+
+### Question 9
+
+Estimate a model using `agedon`, `agedon` squared, `agerec`, `sexmatch` and `diag`. What are the odds ratios?
+
+```{r}
+glmMV<-glm(agvhd ~ agedon+I(agedon^2)+agerec+sexmatch+diag, family = 'binomial', data=bmt)
+exp(coef(glmMV))
+exp(confint(glmMV))
+```
+
+
+### Question 10
+
+Let's visualize the risk of acute graft versus host disease for a 30 year old male  with acute nonlymphoblastic leukemia with a male and a female donor.
+
+```{r}
+predict_data <- expand.grid(agedon=0:60,
+           diag='acute nonlymphoblastic leukemia', 
+           sexdon=levels(bmt$sexdon),
+           sexrec='male', agerec=30)
+predict_data$sexmatch <- ifelse(predict_data$sexdon=='female',0,1) 
+predict_data$y <- predict(glmMV, type = 'response',
+  newdata=predict_data)
+plot(x=predict_data$agedon, y=predict_data$y, type='p',
+     col=ifelse(predict_data$sexdon=='male', 'blue', 'hotpink'))
+```
+
+

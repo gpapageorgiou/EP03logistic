@@ -139,10 +139,10 @@ data(doll,package = 'EP03logistic')
 
 
 ```{r P1, exercise=TRUE, exercise.lines = 10, eval=FALSE}
-#w1 <- rep((1:NROW(doll)),doll$prsyears)
-#with(doll[w1,], table(___, ___))
-#w2 <-
-#with(____)  
+w1 <- rep((1:NROW(doll)),doll$prsyears)
+with(doll[w1,], table(___, ___))
+w2 <-
+with(____)  
 
 ```
 
@@ -152,13 +152,13 @@ data(doll,package = 'EP03logistic')
 ```
 ```{r P1-hint-2}
 # Use:
-#w1 <- rep((1:NROW(doll)),doll$prsyears)
-#with(doll[w1,], table(smoke, age))
-#w2 <- rep((1:NROW(doll)),doll$death)
-#with(doll[w2,], table(smoke, age))
+w1 <- rep((1:NROW(doll)),doll$prsyears)
+with(doll[w1,], table(smoke, age))
+w2 <- rep((1:NROW(doll)),doll$death)
+with(doll[w2,], table(smoke, age))
 # alternatively use
-#xtabs(prsyears~age+smoke, data=doll)
-#xtabs(death~age+smoke, data=doll)
+xtabs(prsyears~age+smoke, data=doll)
+xtabs(death~age+smoke, data=doll)
 
 ```
 
@@ -172,9 +172,9 @@ data(doll,package = 'EP03logistic')
 
 
 ```{r P2, exercise=TRUE, exercise.lines = 10}
-#doll$logpy <- log(___)
-#glm1<-glm(___~1+offset(____),  family=poisson, data=doll)
-#summary(___)
+doll$logpy <- log(___)
+glm1<-glm(___~1+offset(____),  family=poisson, data=doll)
+summary(___)
 ```
 
 ```{r P2-hint-1}
@@ -182,9 +182,9 @@ data(doll,package = 'EP03logistic')
 ```
 ```{r P2-hint-2}
 # The code is:
-#doll$logpy <- log(doll$prsyears)
-#glm1 <- glm(death~1+offset(logpy),  family=poisson, data=doll)
-#summary(glm1)
+doll$logpy <- log(doll$prsyears)
+glm1 <- glm(death~1+offset(logpy),  family=poisson, data=doll)
+summary(glm1)
 ```
 
 ### Question 3
@@ -207,8 +207,8 @@ glm1 <- glm(death~1+offset(logpy),  family=poisson, data=doll)
 ```
 ```{r P3-hint-2}
 # The code is:
-#glm2 <- glm(death~1+age+offset(logpy),  family=poisson, data=doll)
-#summary(glm2)
+glm2 <- glm(death~1+age+offset(logpy),  family=poisson, data=doll)
+summary(glm2)
 ```
 
 ### Question 4

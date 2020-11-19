@@ -1,0 +1,135 @@
+---
+title: "EP03 Logistic Regression Practical 2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(MASS)
+library(Hmisc)
+library(survival)
+library(lattice)
+library(ggplot2)
+library(SparseM)
+library(rms)
+library(EP03logistic)
+data("arthritis", package = "EP03logistic")
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exercise: Proportional odds model
+
+### Question 1
+
+Examine the outcome at baseline and follow-up. Make a frequency table of `baseline` and `arthritis_fu`.
+ 
+```{r}
+table(arthritis$baseline)
+table(arthritis$arthritis_fu)
+```
+
+### Question 2
+
+Now make a contingency table (crosstabulation) of `arthritis_fu`, and `baseline` by treatment. Also look at the contingency table of these variables against each other.
+
+
+```{r}
+table(arthritis$arthritis_fu, arthritis$trt)
+table(arthritis$baseline, arthritis$trt)
+table(arthritis$baseline, arthritis$arthritis_fu)
+```
+
+### Question 3
+
+The data set is a bit small to consider all five levels of the outcome. Therefore we combine 'very poor' and 'poor' and 'good' and 'very good'. For convenience, we do the same with the baseline score.
+
+```{r}
+levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
+                                   "fair"="fair",
+                                   "good"=c("good", "very good"))
+
+table(arthritis$baseline)
+table(arthritis$arthritis_fu)
+```
+
+
+### Question 4
+
+Now estimate a proportional odds logistic model using the treatment as single predictor. We can do this with the `polr` function from the `MASS` package. Call the resulting model `po1`. Use the `summary` to inspect the main results. 
+
+```{r}
+po1<-polr(arthritis_fu~trt, data=arthritis)
+summary(po1)
+```
+
+Observe that there are two intercepts. One for each cutpoint that divides the distribution of the latent variable into the three groups defined by the outcome (poor, fair and good). 
+
+
+### Question 5
+
+To interpret the coefficients it is easier to convert them to odds ratios. You can do this in the same way as in a binary logistic regression model using the `coef` and `exp` functions. Also compute a confidence interval.
+
+```{r}
+exp(coef(po1))
+exp(confint(po1))
+
+```
+
+The OR is 1.6 so we estimate that odds of being in a higher category (fair+good vs poor and good vs fair+poor) are 1.6 times as high. Observe that 1 is not included in the confidence interval so the effect of treatment is significant.
+
+### Question 6
+
+Now add the covariates for `sex`, `age` and the `baseline` score and call the model `po2`. Compute 95% confidence intervals for the coefficients. What can you conclude? 
+
+```{r}
+po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
+summary(po2)
+exp(coef(po2))
+exp(confint(po2))
+```
+
+### Question 7
+
+Now look at the interaction between the baseline score and treatment (add it to the model of the previous question). How do you interpret the coefficients? What is your conclusion? 
+
+```{r}
+po2<-polr(arthritis_fu~trt+sex+age+baseline + trt:baseline, data=arthritis)
+summary(po2)
+exp(coef(po2))
+exp(confint(po2))
+
+```
+
+
+
+## Exercise: Continuation ratio model
+
+### Question 8
+The continuation ratio model is another way to estimate a model with an ordinal response. This model models the log odds of the various categories as: 
+$$
+\frac{P(Y_i=k|P \geq k)}{1-P(Y_i=k|P \geq k)}= \sum_0^k \alpha_k X_i'\beta
+$$
+An advantage of this model specification is that after special preparation of the data set we can use software routines for normal binary logistic regression to fit it. Here we use the function `cr.setup` from the `rms` package. This function creates a list with several variables: `y` is a new response variable that tells us if the response is above a certain cut-point between two responses. `cluster` specifies which border between which of the levels we are considering. The variables `subs` and `reps` make merging with the original data easier. The details are not to important now, just follow the example:
+
+```{r}
+arthritis_cc<- arthritis[complete.cases(arthritis$arthritis_fu),]
+cr_info <- with(arthritis_cc, cr.setup(arthritis_fu))
+art_cr <- data.frame(arthritis_cc[cr_info$subs, ], y=cr_info$y, border=cr_info$cohort)
+```
+
+### Question 9
+
+We can now use the `glm` function to estimate a logistic regression model on the resulting data set. Try this yourself do not forget to include the `border` variable. What are the odds ratios and their confidence intervals?
+
+
+```{r}
+cr1<-glm(y~trt+border, data=art_cr, family = 'binomial') 
+summary(cr1)
+exp(coef(cr1))
+exp(confint(cr1))
+```
+
+The interpretation of the coefficients is as follows: When taking placebo, the log odds of having a poor outcome (versus all other outcomes) is -1.18. The log odds of having a fair outcome given that it is at least fair (so fair vs good) in the placebo group is -1.18+1.16=-0.02. Both log odds decrease by 0.42 when patients are on Auronfin.   

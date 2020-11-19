@@ -1,0 +1,77 @@
+---
+title: "EP03 Logistic Regression Practical 2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library('EP03logistic')
+library(car)
+data("vaccination", package = "EP03logistic")
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Here we will examine the Vaccination data set (from Mead (1988) the Design of experiments: statistical principles for practical application). In the study from which the data set was taken a vaccination study was carried out using different vaccination methods. Additionally there are different batches of vaccine and different areas from which the subjects were sampled. The data set is loaded and named `vaccination`. All subjects were tested if the vaccination succeeded (a positive outcome) or not (a negative outcome).
+
+### Question 1
+
+First plot the data set. What is the number of subjects that are tested, and how many tested positive and negative? Created a variable `Nneg` that contains the number of patients that tested negative.
+
+
+```{r}
+vaccination$Nneg <- with(vaccination, Ntested-Npos)
+vaccination
+sum(vaccination$Ntested)
+sum(vaccination$Npos)
+sum(vaccination$Nneg)
+```
+
+### Question 2
+
+Estimate a logistic regression model using only the `Method` as predictor. Keep the data in aggregated form. Call the model `glm1`. Also compute odds ratios and their confidence intervals.    
+
+```{r}
+glm1 <- glm(cbind(Npos, Nneg) ~ Method, data=vaccination, family='binomial')
+exp(coef(glm1))
+exp(confint(glm1))
+glm0 <- glm(cbind(Npos, Nneg) ~ 1, data=vaccination, family='binomial')
+anova(glm0, glm1,test='LRT')
+```
+
+### Question 3
+
+Now correct for `Area` and `Vaccine.batch`. Call the model `glm2`. Again compute odds ratios and their confidence intervals. Perform a likelihood ratio test on the effect of the method.
+
+```{r}
+glm2 <- glm(cbind(Npos, Nneg) ~ Method + Area + Vaccine.batch,
+            data=vaccination, family='binomial')
+exp(coef(glm2))
+exp(confint(glm2))
+glm0 <- glm(cbind(Npos, Nneg) ~ Area + Vaccine.batch, data=vaccination, family='binomial')
+anova(glm0, glm2,test='LRT')
+
+```
+
+### Question 4
+
+Now perform a deviance test to check the overall goodness-of-fit of `glm2`.
+
+```{r}
+glm_sat <- glm(cbind(Npos, Nneg) ~ Method*Area*Vaccine.batch,
+            data=vaccination, family='binomial')
+
+anova(glm2, glm_sat, test='LRT')
+# or
+n_coef_sat <- length(coef(glm_sat)[!is.na(coef(glm_sat))])
+n_coef_2 <-length(coef(glm2)[!is.na(coef(glm2))])
+
+pchisq(as.vector(-2*(logLik(glm2)- logLik(glm_sat))), n_coef_sat- n_coef_2,lower.tail = FALSE )
+```
+
+### Question 5
+
+Use the function `influencePlot` to check if there are unusual observations. This function is defined in the `car` package which we have already loaded.  
+
+
+```{r}
+influencePlot(glm2)
+```

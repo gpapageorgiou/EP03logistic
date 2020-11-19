@@ -232,6 +232,14 @@ po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
 
 ```
 
+```{r P7-hint-1}
+
+po2<-polr(arthritis_fu~trt+sex+age+baseline+ trt:baseline, data=arthritis)
+summary(po2)
+exp(coef(po2))
+exp(confint(po2))
+```
+
 
 
 ## Exercise: Continuation ratio model
