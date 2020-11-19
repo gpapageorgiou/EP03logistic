@@ -195,11 +195,13 @@ What can you say about the goodness of fit?
 ```{r P3-setup}
 data(doll,package = 'EP03logistic')
 doll$logpy <- log(doll$prsyears)
+glm1 <- glm(death~1+offset(logpy),  family=poisson, data=doll)
 ```
 
 
 ```{r P3, exercise=TRUE, exercise.lines = 10}
-glm1 <- glm(death~1+offset(logpy),  family=poisson, data=doll)
+
+
 ```
 
 ```{r P3-hint-1}

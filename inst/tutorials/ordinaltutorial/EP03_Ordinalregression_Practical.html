@@ -170,7 +170,13 @@ table(arthritis$baseline, arthritis$arthritis_fu)</code></pre>
 <div id="section-question-3" class="section level3">
 <h3>Question 3</h3>
 <p>The data set is a bit small to consider all five levels of the outcome. Therefore we combine ‘very poor’ and ‘poor’ and ‘good’ and ‘very good’. For convenience, we do the same with the baseline score.</p>
+<div class="tutorial-exercise-support" data-label="P3-setup" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
+
+</div>
 <div class="tutorial-exercise" data-label="P3" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="10">
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+</div>
+<div class="tutorial-exercise-support" data-label="P3-hint-1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>levels(arthritis$baseline) &lt;- list(&quot;poor&quot;=c(&quot;very poor&quot;, &quot;poor&quot;),
                                    &quot;fair&quot;=&quot;fair&quot;,
                                    &quot;good&quot;=c(&quot;good&quot;, &quot;very good&quot;))
@@ -181,7 +187,6 @@ levels(arthritis$arthritis_fu) &lt;- list(&quot;poor&quot;=c(&quot;very poor&quo
 
 table(arthritis$baseline)
 table(arthritis$arthritis_fu)</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 <div id="section-question-4" class="section level3">
@@ -197,11 +202,11 @@ levels(arthritis$arthritis_fu) &lt;- list(&quot;poor&quot;=c(&quot;very poor&quo
                                    &quot;good&quot;=c(&quot;good&quot;, &quot;very good&quot;))</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="P4" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="10">
-<pre class="text"><code>#po1&lt;-polr(~, )</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="P4-hint-1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>po1&lt;-polr(arthritis_fu~trt, data=arthritis)
+<pre class="text"><code>po1 &lt;- polr(arthritis_fu ~ trt, data=arthritis, Hess = TRUE)
+
 summary(po1)</code></pre>
 </div>
 <p>Observe that there are two intercepts. One for each cutpoint that divides the distribution of the latent variable into the three groups defined by the outcome (poor, fair and good).</p>
@@ -218,7 +223,8 @@ levels(arthritis$arthritis_fu) &lt;- list(&quot;poor&quot;=c(&quot;very poor&quo
                                    &quot;fair&quot;=&quot;fair&quot;,
                                    &quot;good&quot;=c(&quot;good&quot;, &quot;very good&quot;))
 
-po1&lt;-polr(arthritis_fu~trt, data=arthritis)</code></pre>
+
+po1 &lt;- polr(arthritis_fu ~ trt, data=arthritis, Hess = TRUE)</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="P5" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="10">
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
@@ -241,13 +247,13 @@ levels(arthritis$arthritis_fu) &lt;- list(&quot;poor&quot;=c(&quot;very poor&quo
                                    &quot;fair&quot;=&quot;fair&quot;,
                                    &quot;good&quot;=c(&quot;good&quot;, &quot;very good&quot;))
 
-po1&lt;-polr(arthritis_fu~trt, data=arthritis)</code></pre>
+po1 &lt;- polr(arthritis_fu ~ trt, data=arthritis, Hess = TRUE)</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="P6" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="10">
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="P6-hint-1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>po2&lt;-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
+<pre class="text"><code>po2&lt;-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis, Hess = TRUE)
 summary(po2)
 exp(coef(po2))
 exp(confint(po2))</code></pre>
@@ -265,14 +271,14 @@ levels(arthritis$arthritis_fu) &lt;- list(&quot;poor&quot;=c(&quot;very poor&quo
                                    &quot;fair&quot;=&quot;fair&quot;,
                                    &quot;good&quot;=c(&quot;good&quot;, &quot;very good&quot;))
 
-po1&lt;-polr(arthritis_fu~trt, data=arthritis)
-po2&lt;-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)</code></pre>
+po1&lt;-polr(arthritis_fu~trt, data=arthritis, Hess = TRUE)
+po2&lt;-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis, Hess = TRUE)</code></pre>
 </div>
 <div class="tutorial-exercise" data-label="P7" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="10">
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"default","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <div class="tutorial-exercise-support" data-label="P7-hint-1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>po2&lt;-polr(arthritis_fu~trt+sex+age+baseline+ trt:baseline, data=arthritis)
+<pre class="text"><code>po2&lt;-polr(arthritis_fu~trt+sex+age+baseline+ trt:baseline, data=arthritis, Hess = TRUE)
 summary(po2)
 exp(coef(po2))
 exp(confint(po2))</code></pre>
@@ -345,11 +351,11 @@ session$onSessionEnded(function() {
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q1-1", question = structure("What are the odds that are modeled in the proportional odds model?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_9ca429d",     option = "The odds of being in category k versus the odds of being in any lower category",     value = "The odds of being in category k versus the odds of being in any lower category",     label = structure("The odds of being in category k versus the odds of being in any lower category", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_52ea548",     option = "The ods of being in category k versus being in caegory k-1",     value = "The ods of being in category k versus being in caegory k-1",     label = structure("The ods of being in category k versus being in caegory k-1", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_f3994e1",     option = "The odds of being at least in category k  versus being in any category lower than k",     value = "The odds of being at least in category k  versus being in any category lower than k",     label = structure("The odds of being at least in category k  versus being in any category lower than k", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_5008f8b",     option = "the odds of advancing to category k conditional of being in category k-1 or higher",     value = "the odds of advancing to category k conditional of being in category k-1 or higher",     label = structure("the odds of advancing to category k conditional of being in category k-1 or higher", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "Q1-1-answer", question = "Q1-1"), loading = structure("<strong>Loading:<\u002fstrong> \nWhat are the odds that are modeled in the proportional odds model?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 910460389.076034, options = list()), class = c("learnr_radio", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_radio", label = "Q1-1", question = structure("What are the odds that are modeled in the proportional odds model?", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_9f6f5ce",     option = "The odds of being in category k versus the odds of being in any lower category",     value = "The odds of being in category k versus the odds of being in any lower category",     label = structure("The odds of being in category k versus the odds of being in any lower category", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_e1eaf09",     option = "The ods of being in category k versus being in caegory k-1",     value = "The ods of being in category k versus being in caegory k-1",     label = structure("The ods of being in category k versus being in caegory k-1", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_9bd402",     option = "The odds of being at least in category k  versus being in any category lower than k",     value = "The odds of being at least in category k  versus being in any category lower than k",     label = structure("The odds of being at least in category k  versus being in any category lower than k", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_cce9a92",     option = "the odds of advancing to category k conditional of being in category k-1 or higher",     value = "the odds of advancing to category k conditional of being in category k-1 or higher",     label = structure("the odds of advancing to category k conditional of being in category k-1 or higher", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "Q1-1-answer", question = "Q1-1"), loading = structure("<strong>Loading:<\u002fstrong> \nWhat are the odds that are modeled in the proportional odds model?\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 539253063.248891, options = list()), class = c("learnr_radio", "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-learnr:::question_prerendered_chunk(structure(list(type = "learnr_checkbox", label = "Q2-1", question = structure("Select all true statements:", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_e4c8591",     option = "The continuation ratio model is a model for an ordinal response.",     value = "The continuation ratio model is a model for an ordinal response.",     label = structure("The continuation ratio model is a model for an ordinal response.", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_2583f4f",     option = "The probit model is a model for binary outcomes.",     value = "The probit model is a model for binary outcomes.",     label = structure("The probit model is a model for binary outcomes.", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_b0e2e56",     option = "The polytomous regression model can only be used if the response is ordinal.",     value = "The polytomous regression model can only be used if the response is ordinal.",     label = structure("The polytomous regression model can only be used if the response is ordinal.", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_4cbbd92",     option = "The zero inflated Poisson model is a model for overdispersed count data.",     value = "The zero inflated Poisson model is a model for overdispersed count data.",     label = structure("The zero inflated Poisson model is a model for overdispersed count data.", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "Q2-1-answer", question = "Q2-1"), loading = structure("<strong>Loading:<\u002fstrong> \nSelect all true statements:\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 340613900.841389, options = list()), class = c("learnr_checkbox", "tutorial_question")))
+learnr:::question_prerendered_chunk(structure(list(type = "learnr_checkbox", label = "Q2-1", question = structure("Select all true statements:", html = TRUE, class = c("html", "character")), answers = list(structure(list(id = "lnr_ans_90fc023",     option = "The continuation ratio model is a model for an ordinal response.",     value = "The continuation ratio model is a model for an ordinal response.",     label = structure("The continuation ratio model is a model for an ordinal response.", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_ff4c4b",     option = "The probit model is a model for binary outcomes.",     value = "The probit model is a model for binary outcomes.",     label = structure("The probit model is a model for binary outcomes.", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_8e36aa4",     option = "The polytomous regression model can only be used if the response is ordinal.",     value = "The polytomous regression model can only be used if the response is ordinal.",     label = structure("The polytomous regression model can only be used if the response is ordinal.", html = TRUE, class = c("html",     "character")), correct = FALSE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer")), structure(list(id = "lnr_ans_d32a778",     option = "The zero inflated Poisson model is a model for overdispersed count data.",     value = "The zero inflated Poisson model is a model for overdispersed count data.",     label = structure("The zero inflated Poisson model is a model for overdispersed count data.", html = TRUE, class = c("html",     "character")), correct = TRUE, message = NULL), class = c("tutorial_question_answer", "tutorial_quiz_answer"))), button_labels = list(submit = structure("Submit Answer", html = TRUE, class = c("html", "character")), try_again = structure("Try Again", html = TRUE, class = c("html", "character"))), messages = list(correct = structure("Correct!", html = TRUE, class = c("html", "character")), try_again = structure("Incorrect", html = TRUE, class = c("html", "character")), incorrect = structure("Incorrect", html = TRUE, class = c("html", "character")), message = NULL, post_message = NULL), ids = list(    answer = "Q2-1-answer", question = "Q2-1"), loading = structure("<strong>Loading:<\u002fstrong> \nSelect all true statements:\n<br/><br/><br/>", html = TRUE, class = c("html", "character")), random_answer_order = FALSE, allow_retry = TRUE,     seed = 610497762.215715, options = list()), class = c("learnr_checkbox", "tutorial_question")))
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">

@@ -91,7 +91,16 @@ table(arthritis$baseline, arthritis$arthritis_fu)
 
 The data set is a bit small to consider all five levels of the outcome. Therefore we combine 'very poor' and 'poor' and 'good' and 'very good'. For convenience, we do the same with the baseline score.
 
+```{r P3-setup}
+
+
+```
+
 ```{r P3, exercise=TRUE, exercise.lines = 10}
+
+```
+
+```{r P3-hint-1}
 levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
                                    "fair"="fair",
                                    "good"=c("good", "very good"))
@@ -118,15 +127,17 @@ levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
                                    "fair"="fair",
                                    "good"=c("good", "very good"))
 
+
 ```
 
 ```{r P4, exercise=TRUE, exercise.lines = 10}
-#po1<-polr(~, )
+
 
 ```
 
 ```{r P4-hint-1}
-po1<-polr(arthritis_fu~trt, data=arthritis)
+po1 <- polr(arthritis_fu ~ trt, data=arthritis, Hess = TRUE)
+
 summary(po1)
 ```
 
@@ -145,7 +156,8 @@ levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
                                    "fair"="fair",
                                    "good"=c("good", "very good"))
 
-po1<-polr(arthritis_fu~trt, data=arthritis)
+
+po1 <- polr(arthritis_fu ~ trt, data=arthritis, Hess = TRUE)
 
 
 ```
@@ -180,7 +192,7 @@ levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
                                    "fair"="fair",
                                    "good"=c("good", "very good"))
 
-po1<-polr(arthritis_fu~trt, data=arthritis)
+po1 <- polr(arthritis_fu ~ trt, data=arthritis, Hess = TRUE)
 
 
 ```
@@ -198,7 +210,7 @@ po1<-polr(arthritis_fu~trt, data=arthritis)
 
 ```{r P6-hint-1}
 
-po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
+po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis, Hess = TRUE)
 summary(po2)
 exp(coef(po2))
 exp(confint(po2))
@@ -218,8 +230,8 @@ levels(arthritis$arthritis_fu) <- list("poor"=c("very poor", "poor"),
                                    "fair"="fair",
                                    "good"=c("good", "very good"))
 
-po1<-polr(arthritis_fu~trt, data=arthritis)
-po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
+po1<-polr(arthritis_fu~trt, data=arthritis, Hess = TRUE)
+po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis, Hess = TRUE)
 
 
 ```
@@ -234,7 +246,7 @@ po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
 
 ```{r P7-hint-1}
 
-po2<-polr(arthritis_fu~trt+sex+age+baseline+ trt:baseline, data=arthritis)
+po2<-polr(arthritis_fu~trt+sex+age+baseline+ trt:baseline, data=arthritis, Hess = TRUE)
 summary(po2)
 exp(coef(po2))
 exp(confint(po2))

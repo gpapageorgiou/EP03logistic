@@ -479,12 +479,10 @@ table(arthritis$baseline)</code></pre>
 <div id="question-4" class="section level3">
 <h3>Question 4</h3>
 <p>Now estimate a proportional odds logistic model using the treatment as single predictor. We can do this with the <code>polr</code> function from the <code>MASS</code> package. Call the resulting model <code>po1</code>. Use the <code>summary</code> to inspect the main results.</p>
-<pre class="r"><code>po1&lt;-polr(arthritis_fu~trt, data=arthritis)
+<pre class="r"><code>po1&lt;-polr(arthritis_fu~trt, data=arthritis, Hess = TRUE)
 summary(po1)</code></pre>
-<pre><code>## 
-## Re-fitting to get Hessian</code></pre>
 <pre><code>## Call:
-## polr(formula = arthritis_fu ~ trt, data = arthritis)
+## polr(formula = arthritis_fu ~ trt, data = arthritis, Hess = TRUE)
 ## 
 ## Coefficients:
 ##               Value Std. Error t value
@@ -508,8 +506,6 @@ summary(po1)</code></pre>
 ##     1.636224</code></pre>
 <pre class="r"><code>exp(confint(po1))</code></pre>
 <pre><code>## Waiting for profiling to be done...</code></pre>
-<pre><code>## 
-## Re-fitting to get Hessian</code></pre>
 <pre><code>##    2.5 %   97.5 % 
 ## 1.064363 2.524373</code></pre>
 <p>The OR is 1.6 so we estimate that odds of being in a higher category (fair+good vs poor and good vs fair+poor) are 1.6 times as high. Observe that 1 is not included in the confidence interval so the effect of treatment is significant.</p>
@@ -517,12 +513,11 @@ summary(po1)</code></pre>
 <div id="question-6" class="section level3">
 <h3>Question 6</h3>
 <p>Now add the covariates for <code>sex</code>, <code>age</code> and the <code>baseline</code> score and call the model <code>po2</code>. Compute 95% confidence intervals for the coefficients. What can you conclude?</p>
-<pre class="r"><code>po2&lt;-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
+<pre class="r"><code>po2&lt;-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis, Hess = TRUE)
 summary(po2)</code></pre>
-<pre><code>## 
-## Re-fitting to get Hessian</code></pre>
 <pre><code>## Call:
-## polr(formula = arthritis_fu ~ trt + sex + age + baseline, data = arthritis)
+## polr(formula = arthritis_fu ~ trt + sex + age + baseline, data = arthritis, 
+##     Hess = TRUE)
 ## 
 ## Coefficients:
 ##                 Value Std. Error t value
@@ -544,9 +539,7 @@ summary(po2)</code></pre>
 <pre><code>## trtAuranofin      sexmale          age baselinefair baselinegood 
 ##    1.7436264    1.2305973    0.9896436    2.6216339    8.4292887</code></pre>
 <pre class="r"><code>exp(confint(po2))</code></pre>
-<pre><code>## Waiting for profiling to be done...
-## 
-## Re-fitting to get Hessian</code></pre>
+<pre><code>## Waiting for profiling to be done...</code></pre>
 <pre><code>##                  2.5 %    97.5 %
 ## trtAuranofin 1.1155463  2.738844
 ## sexmale      0.7490644  2.017025
@@ -557,13 +550,11 @@ summary(po2)</code></pre>
 <div id="question-7" class="section level3">
 <h3>Question 7</h3>
 <p>Now look at the interaction between the baseline score and treatment (add it to the model of the previous question). How do you interpret the coefficients? What is your conclusion?</p>
-<pre class="r"><code>po2&lt;-polr(arthritis_fu~trt+sex+age+baseline + trt:baseline, data=arthritis)
+<pre class="r"><code>po2&lt;-polr(arthritis_fu~trt+sex+age+baseline + trt:baseline, data=arthritis, Hess = TRUE)
 summary(po2)</code></pre>
-<pre><code>## 
-## Re-fitting to get Hessian</code></pre>
 <pre><code>## Call:
 ## polr(formula = arthritis_fu ~ trt + sex + age + baseline + trt:baseline, 
-##     data = arthritis)
+##     data = arthritis, Hess = TRUE)
 ## 
 ## Coefficients:
 ##                             Value Std. Error t value
@@ -591,9 +582,7 @@ summary(po2)</code></pre>
 ## trtAuranofin:baselinegood 
 ##                 0.3159590</code></pre>
 <pre class="r"><code>exp(confint(po2))</code></pre>
-<pre><code>## Waiting for profiling to be done...
-## 
-## Re-fitting to get Hessian</code></pre>
+<pre><code>## Waiting for profiling to be done...</code></pre>
 <pre><code>##                                2.5 %     97.5 %
 ## trtAuranofin              1.88783638  9.1474743
 ## sexmale                   0.68914953  1.8819615

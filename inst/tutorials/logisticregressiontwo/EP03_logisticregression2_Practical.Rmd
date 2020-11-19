@@ -131,7 +131,7 @@ quiz(
 
 ```{r Q6}
 quiz(
-  question("What is the probability of an adverse event of a 50 years old man treated with roxy)",
+  question("What is the probability of an adverse event of a 50 years old man treated with roxitromycin)",
     answer("Less than zero",message = 'Remember that probabilities should be between 0 and 1.'),
     answer("Between 0 and 2%", message = 'Fill in the betas and Xs in the linear predictor and convert to odds.'),
     answer("Between 2% and 4%", correct=TRUE),
@@ -362,12 +362,16 @@ Next switch to the 'Deviation coding' contrast for LOC instead, by running the c
  `contrasts(fracture$LOC) <- contr.sum(3)` 
 In this case the effect of category 3 of LOC (the last category) is the negative sum of the effects of the categories 1 and 2. 
 Fit the model using this coding and compare the estimated coefficients again.
+
 ```{r P7-setup}
 
 ```
 
+
 ```{r P7, exercise=TRUE, exercise.lines = 10, eval=FALSE}
+
 ```
+
 
 ```{r P7-hint-1, eval=FALSE}
 # Use the following template

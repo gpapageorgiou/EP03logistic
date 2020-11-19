@@ -61,7 +61,7 @@ table(arthritis$arthritis_fu)
 Now estimate a proportional odds logistic model using the treatment as single predictor. We can do this with the `polr` function from the `MASS` package. Call the resulting model `po1`. Use the `summary` to inspect the main results. 
 
 ```{r}
-po1<-polr(arthritis_fu~trt, data=arthritis)
+po1<-polr(arthritis_fu~trt, data=arthritis, Hess = TRUE)
 summary(po1)
 ```
 
@@ -85,7 +85,7 @@ The OR is 1.6 so we estimate that odds of being in a higher category (fair+good 
 Now add the covariates for `sex`, `age` and the `baseline` score and call the model `po2`. Compute 95% confidence intervals for the coefficients. What can you conclude? 
 
 ```{r}
-po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis)
+po2<-polr(arthritis_fu~trt+sex+age+baseline, data=arthritis, Hess = TRUE)
 summary(po2)
 exp(coef(po2))
 exp(confint(po2))
@@ -96,7 +96,7 @@ exp(confint(po2))
 Now look at the interaction between the baseline score and treatment (add it to the model of the previous question). How do you interpret the coefficients? What is your conclusion? 
 
 ```{r}
-po2<-polr(arthritis_fu~trt+sex+age+baseline + trt:baseline, data=arthritis)
+po2<-polr(arthritis_fu~trt+sex+age+baseline + trt:baseline, data=arthritis, Hess = TRUE)
 summary(po2)
 exp(coef(po2))
 exp(confint(po2))
