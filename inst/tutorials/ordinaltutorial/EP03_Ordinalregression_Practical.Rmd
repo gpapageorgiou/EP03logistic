@@ -291,7 +291,7 @@ art_cr <- data.frame(arthritis_cc[cr_info$subs, ], y=cr_info$y, border=cr_info$c
 We can now use the `glm` function to estimate a logistic regression model on the resulting data set. Try this yourself do not forget to include the `border` variable. What are the odds ratios and their confidence intervals?
 
 
-```{r Pcr7-setup}
+```{r P7cr-setup}
 levels(arthritis$baseline) <- list("poor"=c("very poor", "poor"),
                                    "fair"="fair",
                                    "good"=c("good", "very good"))

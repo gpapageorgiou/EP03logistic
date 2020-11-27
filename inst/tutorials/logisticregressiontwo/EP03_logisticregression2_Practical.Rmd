@@ -390,7 +390,7 @@ contrasts(____)<-contrastsbase
 # The code is:
 contrastsbase<- contrasts(fracture$LOC)
 contrasts(fracture$LOC) <- contr.sum(3)
-glm37 <-glm(DEF~C(LOC, base=3)+STEN,data=fracture, family = binomial)
+glm37 <-glm(DEF~LOC+STEN,data=fracture, family = binomial)
 glm37
 exp(coef(glm37))
 # restore contrast
